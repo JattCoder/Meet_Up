@@ -1,0 +1,25 @@
+<html>
+
+    <script src="index.js"></script>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <head>
+        <title>Meet Up</title>
+    </head>
+    <body>
+        <div id="fullscreen">
+            <div id="map"></div>
+            <input id="search" placeholder="Search"/>
+            <button id="btn">Search</button>
+        </div>
+        <button id="menu">Menu</button>
+        <script>
+            function onLoad (){
+                home = new Index;
+                home.loadmap();
+            }
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCo_oi77Myi1Atxai8-Ocz9gdFV3upyPjU&callback=onLoad"
+        async defer></script>
+    </body>
+</html>

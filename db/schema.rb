@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_28_044118) do
+ActiveRecord::Schema.define(version: 2020_04_28_044119) do
 
   create_table "favorites", force: :cascade do |t|
+    t.integer "user_id"
     t.string "name"
     t.string "address"
     t.float "latitude"
@@ -20,6 +21,7 @@ ActiveRecord::Schema.define(version: 2020_04_28_044118) do
   end
 
   create_table "maps", force: :cascade do |t|
+    t.integer "user_id"
     t.string "name"
     t.string "address"
     t.float "latitude"
@@ -27,12 +29,21 @@ ActiveRecord::Schema.define(version: 2020_04_28_044118) do
   end
 
   create_table "navigations", force: :cascade do |t|
+    t.integer "user_id"
     t.string "startpoint"
     t.string "endpoint"
     t.float "startgeo"
     t.float "endgeo"
     t.float "distance"
     t.string "duration"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "location_share"
+    t.boolean "ferries"
+    t.boolean "tolls"
+    t.boolean "highways"
   end
 
   create_table "users", force: :cascade do |t|
