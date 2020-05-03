@@ -3,9 +3,9 @@ class Index {
     var infoWindow;   
     var map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 40.674, lng: -73.945},
-        zoom: 12,
+        zoom: 15,
         disableDefaultUI: true,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        clickableIcons: false,
         styles: [
             {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
             {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},

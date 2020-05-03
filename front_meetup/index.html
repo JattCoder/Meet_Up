@@ -1,5 +1,4 @@
 <html>
-
     <script src="index.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
     <head>
@@ -9,13 +8,57 @@
         <div id="fullscreen">
             <div id="map"></div>
             <input id="search" placeholder="Search"/>
-            <button id="btn">Search</button>
+            <button id="btn" onclick="onSearch()">Search</button>
         </div>
-        <button id="menu">Menu</button>
+        <button id="menu" onclick="onSettings()">Settings</button>
+        <div id="menu_top">
+            <div class="center" id="settings" style="text-align: center;">
+                <button id="login_btn" onclick="onLogin()">Login</button>
+                <div id="contenta">
+                    <a class="set_heading">Avoid Highways<label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label></a>
+                    <a class="set_heading">Avoid Tolls<label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label></a>
+                    <a class="set_heading">Avoid Ferries<label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label></a>
+                </div>
+                <button id="dn_btn" onclick="onSettings()">Done</button>
+            </div>
+        </div>
         <script>
             function onLoad (){
+                document.getElementById("settings").style.display = 'none';
                 home = new Index;
                 home.loadmap();
+            }
+
+            function onSearch (){
+
+            }
+
+            function onSelection (){
+
+            }
+
+            function onSettings (){
+                var settings = document.getElementById("settings").style.display;
+                if (settings == ''){
+                    document.getElementById("settings").style.display = 'none';
+                    document.getElementById("map").style.filter = ""
+                }else{
+                    document.getElementById("map").style.filter = "blur(3px)"
+                    document.getElementById("settings").style.display = '';
+                }
+            }
+
+            function onLogin (){
+
             }
         </script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
