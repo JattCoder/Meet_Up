@@ -2,15 +2,14 @@ class SessionsController < ApplicationController
     
     def destroy
         session[:user_id] = nil
-        redirect_to root_path, notice: "Logged out!"
+        render plain: "Logged Out"
       end
   
       def omniauth
-          @user = User.from_omniauth(auth)
-          @user.save
+          user = User.from_omniauth(auth)
+          user.save
           session[:user_id] = @user.id
-          redirect_to root_path
-          #request.location.country
+          render json: user
       end
       
       private

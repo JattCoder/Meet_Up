@@ -55,6 +55,11 @@
     margin-left: 230px;
 }
 
+#menu_top {
+  margin: 0 auto;
+  justify-content: center;
+}
+
 #menu {
     padding-left: 20px;
     padding-right: 20px;
@@ -179,6 +184,20 @@
   }
 
   #login_btn {
+    padding: 10px 50px;
+    font-family: Verdana;
+    outline: none;
+    outline-width: 0;
+    height: 45px;
+    width: auto;
+    border-radius: 25px;
+    border-style: offset;
+    color: white;
+    border: 3px;
+    background: rgba(0,0,0,0.3);
+  }
+
+  #logout_btn {
     padding: 10px 50px;
     font-family: Verdana;
     outline: none;

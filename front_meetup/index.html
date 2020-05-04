@@ -1,5 +1,6 @@
 <html>
     <script src="index.js"></script>
+    <script src="search.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
     <head>
         <title>Meet Up</title>
@@ -13,7 +14,8 @@
         <button id="menu" onclick="onSettings()">Settings</button>
         <div id="menu_top">
             <div class="center" id="settings" style="text-align: center;">
-                <button id="login_btn" onclick="onLogin()">Login</button>
+                <button id="login_btn" class="g-signin2" data-onsuccess="onSignIn">Login</button>
+                <button id="logout_btn" onclick="signOut()">Signout</button>
                 <div id="contenta">
                     <a class="set_heading">Avoid Highways<label class="switch">
                         <input type="checkbox">
@@ -34,16 +36,17 @@
         <script>
             function onLoad (){
                 document.getElementById("settings").style.display = 'none';
+                document.getElementById("logout_btn").style.display = 'none';
                 home = new Index;
                 home.loadmap();
             }
 
             function onSearch (){
-
+                search = new Search(document.getElementById("search").value);
             }
 
             function onSelection (){
-
+                
             }
 
             function onSettings (){
@@ -51,18 +54,40 @@
                 if (settings == ''){
                     document.getElementById("settings").style.display = 'none';
                     document.getElementById("map").style.filter = ""
+                    alert("Re-routing")
                 }else{
                     document.getElementById("map").style.filter = "blur(3px)"
                     document.getElementById("settings").style.display = '';
                 }
             }
 
-            function onLogin (){
+            function onSignIn(googleUser) {
+                if (googleUser){
+                    alert("FOUND PROFILE!!\nName: "+googleUser.Pt["Ad"]+"\nEmail: "+googleUser.Pt["yu"]+"\nUser ID: "+googleUser.Pt["MU"]);
+                    document.getElementById("login_btn").style.display = 'none';
+                    document.getElementById("logout_btn").name = googleUser.Pt["Ad"]+" - Signout";
+                    document.getElementById("logout_btn").style.display = '';
+                }else{
+                    alert("Authorization Failed!");
+                }
+            }
 
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    alert(auth2.currentUser.je["Pt"]["Ad"]+' signed out.');
+                    document.getElementById("logout_btn").style.display = 'none';
+                    document.getElementById("login_btn").style.display = '';
+                });
             }
         </script>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta name="google-signin-client_id" content="945662824135-ig4027d81ifpcd84igq1hls3nbjk3035.apps.googleusercontent.com">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCo_oi77Myi1Atxai8-Ocz9gdFV3upyPjU&callback=onLoad"
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYUzQtSil29MmByyGmVeoIzcM80HznRTA&callback=onLoad"
         async defer></script>
     </body>
+
 </html>
+
+<!-- npx reload -b -->
