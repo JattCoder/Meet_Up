@@ -42,7 +42,14 @@
             }
 
             function onSearch (){
-                search = new Search(document.getElementById("search").value);
+                var currentUser = gapi.auth2.getAuthInstance();
+                if (currentUser){
+                    search = new Search(document.getElementById("search").value);
+                    var locations = search.all_locations
+                }else{
+                    alert("Please Sign in!")
+                    onSettings();
+                }
             }
 
             function onSelection (){
@@ -63,7 +70,7 @@
 
             function onSignIn(googleUser) {
                 if (googleUser){
-                    alert("FOUND PROFILE!!\nName: "+googleUser.Pt["Ad"]+"\nEmail: "+googleUser.Pt["yu"]+"\nUser ID: "+googleUser.Pt["MU"]);
+                    alert("Signed In as:\nName: "+googleUser.Pt["Ad"]+"\nEmail: "+googleUser.Pt["yu"]+"\nUser ID: "+googleUser.Pt["MU"]);
                     document.getElementById("login_btn").style.display = 'none';
                     document.getElementById("logout_btn").name = googleUser.Pt["Ad"]+" - Signout";
                     document.getElementById("logout_btn").style.display = '';
@@ -73,8 +80,8 @@
             }
 
             function signOut() {
-                var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut().then(function () {
+                var currentUser = gapi.auth2.getAuthInstance();
+                currentUser.signOut().then(function () {
                     alert(auth2.currentUser.je["Pt"]["Ad"]+' signed out.');
                     document.getElementById("logout_btn").style.display = 'none';
                     document.getElementById("login_btn").style.display = '';

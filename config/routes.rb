@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'auth/:provider/callback', to: 'sessions#omniauth'
   get 'auth/failure', to: redirect('/')
   get 'maps/navigation', to: 'navigation#navigate'
+  post 'maps/places', to: 'search#places'
   resources :cats
   get 'logout', to: 'sessions#destroy', as: 'logout'
 end

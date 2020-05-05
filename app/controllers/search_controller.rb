@@ -15,7 +15,7 @@ class SearchController < ApplicationController
             }
             results << info
         end
-        # render :json results :only[:name, :latitude, :longitude]
+        render json: results
     end
 
 end
