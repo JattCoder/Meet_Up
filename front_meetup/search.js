@@ -13,17 +13,10 @@ class Search {
                 }
                 return response.json();
         }).then(function(data){
-                all_locations = data;
-                console.log(all_locations);
-                alert('got data here');
+            home = new Index;
+            home.loadmap(data);
         }).catch(function(error){
                 console.log('Request failed', error);
         })
-    }
-
-    all_locations() {
-        alert("were in locations")
-        all_locations
-        debugger
     }
 }

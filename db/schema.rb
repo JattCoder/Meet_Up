@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 2020_04_28_044119) do
 
   create_table "settings", force: :cascade do |t|
     t.integer "user_id"
-    t.string "location_share"
+    t.boolean "location_share"
     t.boolean "ferries"
     t.boolean "tolls"
     t.boolean "highways"
@@ -49,7 +49,8 @@ ActiveRecord::Schema.define(version: 2020_04_28_044119) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
-    t.string "password_digest"
+    t.string "uid"
+    t.string "image"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

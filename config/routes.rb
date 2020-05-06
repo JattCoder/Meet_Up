@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
   get 'maps/navigation', to: 'navigation#navigate'
   post 'maps/places', to: 'search#places'
+  post 'user/new', to: 'user#new'
+  post 'user/settings', to: 'setting#update_settings'
   resources :cats
   get 'logout', to: 'sessions#destroy', as: 'logout'
 end

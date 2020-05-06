@@ -1,6 +1,6 @@
 class Index {
   loadmap(location = []) {
-    var infoWindow;   
+    var infoWindow;
     var map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 40.674, lng: -73.945},
         zoom: 15,
@@ -105,6 +105,35 @@ class Index {
             } else {
                 handleLocationError(false, infoWindow, map.getCenter());
             }
+        }else{
+            infoWindow = new google.maps.InfoWindow();
+            var marker, i, center, zoom;
+            for (i = 0; i < location.length; i++) { 
+                marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(location[i].Geopoints.lat, location[i].Geopoints.lng),
+                  map: map
+                });
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                  return function() {
+                    infoWindow.setContent(location[i].Name);
+                    infoWindow.open(map, marker);
+                  }
+                })(marker, i));
+            }
+            if (location.length == 1){
+                center = {
+                    lat: location[i].Geopoints.lat,
+                    lng: location[i].Geopoints.lng
+                }
+            }else{
+                var geo = location[location.length/2]
+                center = {
+                    lat: geo.Geopoints.lat,
+                    lng: geo.Geopoints.lng
+                }
+                map.setZoom(11);
+            }
+            map.setCenter(center);
         }
     }
 

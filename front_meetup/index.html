@@ -1,6 +1,8 @@
 <html>
     <script src="index.js"></script>
     <script src="search.js"></script>
+    <script src="account.js"></script>
+    <script src="settings.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
     <head>
         <title>Meet Up</title>
@@ -18,15 +20,15 @@
                 <button id="logout_btn" onclick="signOut()">Signout</button>
                 <div id="contenta">
                     <a class="set_heading">Avoid Highways<label class="switch">
-                        <input type="checkbox">
+                        <input type="checkbox" id="highways">
                         <span class="slider round"></span>
                     </label></a>
                     <a class="set_heading">Avoid Tolls<label class="switch">
-                        <input type="checkbox">
+                        <input type="checkbox" id="tolls">
                         <span class="slider round"></span>
                     </label></a>
                     <a class="set_heading">Avoid Ferries<label class="switch">
-                        <input type="checkbox">
+                        <input type="checkbox" id="ferries">
                         <span class="slider round"></span>
                     </label></a>
                 </div>
@@ -45,7 +47,6 @@
                 var currentUser = gapi.auth2.getAuthInstance();
                 if (currentUser){
                     search = new Search(document.getElementById("search").value);
-                    var locations = search.all_locations
                 }else{
                     alert("Please Sign in!")
                     onSettings();
@@ -61,6 +62,8 @@
                 if (settings == ''){
                     document.getElementById("settings").style.display = 'none';
                     document.getElementById("map").style.filter = ""
+                    next = new Settings();
+                    next.save_settings();
                     alert("Re-routing")
                 }else{
                     document.getElementById("map").style.filter = "blur(3px)"
@@ -70,9 +73,9 @@
 
             function onSignIn(googleUser) {
                 if (googleUser){
-                    alert("Signed In as:\nName: "+googleUser.Pt["Ad"]+"\nEmail: "+googleUser.Pt["yu"]+"\nUser ID: "+googleUser.Pt["MU"]);
+                    acc = new Account(googleUser);
                     document.getElementById("login_btn").style.display = 'none';
-                    document.getElementById("logout_btn").name = googleUser.Pt["Ad"]+" - Signout";
+                    document.getElementById("logout_btn").value = googleUser.Pt["Ad"]+" - Signout";
                     document.getElementById("logout_btn").style.display = '';
                 }else{
                     alert("Authorization Failed!");
