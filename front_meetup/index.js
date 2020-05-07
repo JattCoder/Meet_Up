@@ -95,11 +95,12 @@ class Index {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     };
+                    this.geopos = pos;
                     infoWindow.setPosition(pos);
                     infoWindow.setContent('Your Location');
                     infoWindow.open(map);
                     map.setCenter(pos);
-                }, function() {
+                }.bind(this), function() {
                     handleLocationError(true, infoWindow, map.getCenter());
                 });
             } else {
@@ -107,23 +108,31 @@ class Index {
             }
         }else{
             infoWindow = new google.maps.InfoWindow();
-            var marker, i, center, zoom;
+            var marker, i, center;
             for (i = 0; i < location.length; i++) { 
                 marker = new google.maps.Marker({
                   position: new google.maps.LatLng(location[i].Geopoints.lat, location[i].Geopoints.lng),
+                  animation: google.maps.Animation.DROP,
                   map: map
                 });
-                google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                  return function() {
-                    infoWindow.setContent(location[i].Name);
+                google.maps.event.addListener(marker, 'click', ((marker, i) =>{
+                  return () => {
+                    if(location[i].Status == null && location[i].Rating == null && location[i].Total_Ratings == null){
+                        infoWindow.setContent(location[i].Address+"<br/><br/>"+
+                                            "Directions <br/> Add To Favorites");
+                    }else{
+                        infoWindow.setContent(`${location[i].Status}<br/><br/>${location[i].Name}<br/>${location[i].Address}
+                            <br/>Rating: ${location[i].Rating} (${location[i].Total_Ratings})<br/><br/>
+                            <a onclick='onSelection(${JSON.stringify(location[i].Geopoints)})'>Directions</a> <br/> Add To Favorites)`)
+                    }
                     infoWindow.open(map, marker);
                   }
                 })(marker, i));
             }
             if (location.length == 1){
                 center = {
-                    lat: location[i].Geopoints.lat,
-                    lng: location[i].Geopoints.lng
+                    lat: location[0].Geopoints.lat,
+                    lng: location[0].Geopoints.lng
                 }
             }else{
                 var geo = location[location.length/2]

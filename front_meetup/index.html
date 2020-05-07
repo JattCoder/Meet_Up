@@ -53,8 +53,8 @@
                 }
             }
 
-            function onSelection (){
-                
+            function onSelection (geo){
+                alert(geo.lat+" : "+geo.lng)
             }
 
             function onSettings (){
@@ -74,6 +74,7 @@
             function onSignIn(googleUser) {
                 if (googleUser){
                     acc = new Account(googleUser);
+                    acc.configSettings()
                     document.getElementById("login_btn").style.display = 'none';
                     document.getElementById("logout_btn").value = googleUser.Pt["Ad"]+" - Signout";
                     document.getElementById("logout_btn").style.display = '';
@@ -83,9 +84,10 @@
             }
 
             function signOut() {
-                var currentUser = gapi.auth2.getAuthInstance();
-                currentUser.signOut().then(function () {
-                    alert(auth2.currentUser.je["Pt"]["Ad"]+' signed out.');
+                var googleObj = gapi.auth2.getAuthInstance();
+                var name = googleObj.currentUser.je["Pt"]["Ad"];
+                googleObj.signOut().then(function () {
+                    alert(name+' signed out.');
                     document.getElementById("logout_btn").style.display = 'none';
                     document.getElementById("login_btn").style.display = '';
                 });

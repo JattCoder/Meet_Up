@@ -10,15 +10,21 @@ class Account {
             if (!response.ok){ throw response }
             return response.json();
         }).then(function(data){
-            console.log(data)
-            var highway = document.getElementById('highways').checked;
-            var tolls = document.getElementById('tolls').checked;
-            var ferries = document.getElementById('ferries').checked;
-            if(highway != data.highways) document.getElementById('highways').dispatchEvent(new MouseEvent("click"));
-            if(tolls != data.tolls) document.getElementById('tolls').dispatchEvent(new MouseEvent("click"));
-            if(ferries != data.ferries) document.getElementById('ferries').dispatchEvent(new MouseEvent("click"));
-        }).catch(function(error){
+            this.highways = data.highways
+            this.tolls = data.tolls
+            this.ferries = data.ferries
+        }.bind(this)).catch(function(error){
             console.log('Request failed', error);
         });
     }
+
+    configSettings() {
+        var highway = document.getElementById('highways').checked;
+        var tolls = document.getElementById('tolls').checked;
+        var ferries = document.getElementById('ferries').checked;
+        if(highway != this.highways) document.getElementById('highways').dispatchEvent(new MouseEvent("click"));
+        if(tolls != this.tolls) document.getElementById('tolls').dispatchEvent(new MouseEvent("click"));
+        if(ferries != this.ferries) document.getElementById('ferries').dispatchEvent(new MouseEvent("click"));
+    }
+
 }

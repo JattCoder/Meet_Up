@@ -13,8 +13,9 @@ class Search {
                 }
                 return response.json();
         }).then(function(data){
-            home = new Index;
+            //home = new Index;
             home.loadmap(data);
+            
         }).catch(function(error){
                 console.log('Request failed', error);
         })

@@ -11,7 +11,7 @@ class SearchController < ApplicationController
                 "Type" => business["json_result_object"]["types"][0],
                 "Geopoints" => business["json_result_object"]["geometry"]["location"],
                 "Rating" => business ["json_result_object"]["rating"],
-                "Total Ratings" => business["json_result_object"]["user_ratings_total"]
+                "Total_Ratings" => business["json_result_object"]["user_ratings_total"]
             }
             results << info
         end
