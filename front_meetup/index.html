@@ -4,6 +4,7 @@
     <script src="account.js"></script>
     <script src="settings.js"></script>
     <script src="route.js"></script>
+    <script src="favorites.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
     <head>
         <title>Meet Up</title>
@@ -45,7 +46,7 @@
             }
 
             function onSearch (){
-                var currentUser = gapi.auth2.getAuthInstance();
+                var currentUser = gapi.auth2.getAuthInstance().currentUser.je.Pt;
                 if (currentUser){
                     search = new Search(document.getElementById("search").value);
                 }else{
@@ -60,7 +61,12 @@
             }
 
             function toFav(location){
-                console.log(location);
+                favs.add_new(location);
+            }
+
+            function letsGo(route){
+                console.log(route);
+                alert("lets go");
             }
 
             function onSettings (){
@@ -80,7 +86,9 @@
             function onSignIn(googleUser) {
                 if (googleUser){
                     acc = new Account(googleUser);
-                    acc.configSettings()
+                    acc.configSettings();
+                    favs = new Favorites();
+                    favs.add_to_maps(googleUser,home.map);
                     document.getElementById("login_btn").style.display = 'none';
                     document.getElementById("logout_btn").value = googleUser.Pt["Ad"]+" - Signout";
                     document.getElementById("logout_btn").style.display = '';

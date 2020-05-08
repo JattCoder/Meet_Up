@@ -96,6 +96,7 @@ class Index {
                         lng: position.coords.longitude
                     };
                     this.geopos = pos;
+                    this.map = map;
                     infoWindow.setPosition(pos);
                     infoWindow.setContent('Your Location');
                     infoWindow.open(map);
@@ -119,7 +120,45 @@ class Index {
             var bounds = new google.maps.LatLngBounds();
             for (var i = 0; i < path.length; i++) { bounds.extend(path[i]); }
             map.fitBounds(bounds);
-
+            var st = location[0]["legs"][0].start_location
+            var ed = location[0]["legs"][0].end_location
+            var start = new google.maps.Marker({
+                position: new google.maps.LatLng(st['lat'], st['lng']),
+                animation: google.maps.Animation.DROP,
+                map: map
+            });
+            var stinfo = new google.maps.InfoWindow();
+            google.maps.event.addListener(start, 'click', ((start) =>{
+                return () => {
+                    stinfo.setContent(`${acc.name}`);
+                    stinfo.open(map, start);
+                }
+            })(start));
+            //var midpoint = new google.maps.Marker({
+            //    position: new google.maps.LatLng(location[i].Geopoints.lat, location[i].Geopoints.lng),
+            //    animation: google.maps.Animation.DROP,
+            //    map: map
+            //});
+            var destination = new google.maps.Marker({
+                position: new google.maps.LatLng(ed['lat'], ed['lng']),
+                animation: google.maps.Animation.DROP,
+                map: map
+            });
+            console.log(location[0])
+            //total distance, duration and estimated arrival
+            var edinfo = new google.maps.InfoWindow();
+            google.maps.event.addListener(destination, 'click', ((destination) =>{
+                return () => {
+                    edinfo.setContent(`Destination</br></br>${location[0]["legs"][0].end_address}</br>
+                                       Distance: ${location[0]["legs"][0].distance.text}</br>
+                                       Duration: ${location[0]["legs"][0].duration.text}</br>
+                                       Estimated Arrival: </br></br>
+                                       <a onclick='letsGo(${location[0]})'>Start</a>`);
+                    edinfo.open(map, destination);
+                }
+            })(destination));
+            new google.maps.event.trigger( start, 'click' );
+            new google.maps.event.trigger( destination, 'click' );
         }else{
             infoWindow = new google.maps.InfoWindow();
             var marker, i, center;
