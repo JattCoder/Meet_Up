@@ -125,7 +125,8 @@ class Index {
             var start = new google.maps.Marker({
                 position: new google.maps.LatLng(st['lat'], st['lng']),
                 animation: google.maps.Animation.DROP,
-                map: map
+                map: map,
+                icon: 'https://img.icons8.com/ultraviolet/40/000000/marker.png'
             });
             var stinfo = new google.maps.InfoWindow();
             google.maps.event.addListener(start, 'click', ((start) =>{
@@ -138,11 +139,13 @@ class Index {
             //    position: new google.maps.LatLng(location[i].Geopoints.lat, location[i].Geopoints.lng),
             //    animation: google.maps.Animation.DROP,
             //    map: map
+            //    icon: 'https://img.icons8.com/officel/40/000000/map-pin.png'
             //});
             var destination = new google.maps.Marker({
                 position: new google.maps.LatLng(ed['lat'], ed['lng']),
                 animation: google.maps.Animation.DROP,
-                map: map
+                map: map,
+                icon: 'https://img.icons8.com/office/40/000000/marker.png'
             });
             console.log(location[0])
             //total distance, duration and estimated arrival
@@ -166,7 +169,8 @@ class Index {
                 marker = new google.maps.Marker({
                   position: new google.maps.LatLng(location[i].Geopoints.lat, location[i].Geopoints.lng),
                   animation: google.maps.Animation.DROP,
-                  map: map
+                  map: map,
+                  icon: 'https://img.icons8.com/office/40/000000/marker.png'
                 });
                 google.maps.event.addListener(marker, 'click', ((marker, i) =>{
                   return () => {

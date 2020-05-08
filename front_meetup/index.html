@@ -76,7 +76,7 @@
                     document.getElementById("map").style.filter = ""
                     next = new Settings();
                     next.save_settings();
-                    alert("Re-routing")
+                    route = new Route();
                 }else{
                     document.getElementById("map").style.filter = "blur(3px)"
                     document.getElementById("settings").style.display = '';
@@ -86,7 +86,6 @@
             function onSignIn(googleUser) {
                 if (googleUser){
                     acc = new Account(googleUser);
-                    acc.configSettings();
                     favs = new Favorites();
                     favs.add_to_maps(googleUser,home.map);
                     document.getElementById("login_btn").style.display = 'none';

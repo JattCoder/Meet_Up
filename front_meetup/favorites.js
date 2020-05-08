@@ -16,7 +16,8 @@ class Favorites {
                 marker = new google.maps.Marker({
                   position: new google.maps.LatLng(data[i].latitude, data[i].longitude),
                   animation: google.maps.Animation.DROP,
-                  map: map
+                  map: map,
+                  icon: 'https://img.icons8.com/emoji/48/000000/yellow-heart.png'
                 });
                 var geos = {'lat': data[i].latitude, 'lng': data[i].longitude}
                 google.maps.event.addListener(marker, 'click', ((marker, i) =>{

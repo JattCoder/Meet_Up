@@ -12,8 +12,8 @@ class NavigationController < ApplicationController
         tolls = '' if settings.tolls == false
         gmaps = GoogleMapsService::Client.new(
             key: Rails.application.credentials.production[:api_key], 
-            retry_timeout: 20, 
-            queries_per_second: 10
+            retry_timeout: 40, 
+            queries_per_second: 80
         )
         render json: routes = gmaps.directions(
             start, 
