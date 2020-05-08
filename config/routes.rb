@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   get 'auth/:provider/callback', to: 'sessions#omniauth'
   get 'auth/failure', to: redirect('/')
-  get 'maps/navigation', to: 'navigation#navigate'
+  post 'maps/navigation', to: 'navigation#navigate'
   post 'maps/places', to: 'search#places'
   post 'user/new', to: 'user#new'
   post 'user/settings', to: 'setting#update_settings'

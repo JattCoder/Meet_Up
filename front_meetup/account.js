@@ -13,6 +13,8 @@ class Account {
             this.highways = data.highways
             this.tolls = data.tolls
             this.ferries = data.ferries
+            this.email = googleUser.Pt["yu"]
+            this.name = googleUser.Pt["Ad"]
         }.bind(this)).catch(function(error){
             console.log('Request failed', error);
         });

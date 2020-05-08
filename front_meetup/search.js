@@ -1,6 +1,5 @@
 class Search {
     constructor(input){
-        var all_locations = []
         fetch('http://localhost:3000/maps/places', {  
             method: 'post',
             body: JSON.stringify({search: input}),
@@ -15,8 +14,8 @@ class Search {
         }).then(function(data){
             //home = new Index;
             home.loadmap(data);
-            
-        }).catch(function(error){
+            this.all_locations = data;
+        }.bind(this)).catch(function(error){
                 console.log('Request failed', error);
         })
     }

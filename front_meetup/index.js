@@ -106,6 +106,20 @@ class Index {
             } else {
                 handleLocationError(false, infoWindow, map.getCenter());
             }
+        }else if(location[0]["overview_polyline"]!= null){
+            var path = google.maps.geometry.encoding.decodePath(location[0]["overview_polyline"]["points"]);
+            var flightPath = new google.maps.Polyline({
+                path: path,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+            flightPath.setMap(map);
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0; i < path.length; i++) { bounds.extend(path[i]); }
+            map.fitBounds(bounds);
+
         }else{
             infoWindow = new google.maps.InfoWindow();
             var marker, i, center;
@@ -118,12 +132,14 @@ class Index {
                 google.maps.event.addListener(marker, 'click', ((marker, i) =>{
                   return () => {
                     if(location[i].Status == null && location[i].Rating == null && location[i].Total_Ratings == null){
-                        infoWindow.setContent(location[i].Address+"<br/><br/>"+
-                                            "Directions <br/> Add To Favorites");
+                        infoWindow.setContent(`${location[i].Address}<br/><br/>
+                        <a onclick='onSelection(${JSON.stringify(location[i].Geopoints)})'>Directions</a> <br/>
+                        <a onclick='toFav(${JSON.stringify(location[i])})'>Add to Favorites</a>`);
                     }else{
                         infoWindow.setContent(`${location[i].Status}<br/><br/>${location[i].Name}<br/>${location[i].Address}
                             <br/>Rating: ${location[i].Rating} (${location[i].Total_Ratings})<br/><br/>
-                            <a onclick='onSelection(${JSON.stringify(location[i].Geopoints)})'>Directions</a> <br/> Add To Favorites)`)
+                            <a onclick='onSelection(${JSON.stringify(location[i].Geopoints)})'>Directions</a> <br/>
+                            <a onclick='toFav(${JSON.stringify(location[i])})'>Add to Favorites</a>`)
                     }
                     infoWindow.open(map, marker);
                   }
