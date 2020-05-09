@@ -1,6 +1,6 @@
 class Index {
   loadmap(location = []) {
-    var infoWindow;
+    var infoWindow, me;
     var map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 40.674, lng: -73.945},
         zoom: 15,
@@ -91,16 +91,27 @@ class Index {
             infoWindow = new google.maps.InfoWindow;
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    var pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    this.geopos = pos;
+                    this.geopos = {lat:position.coords.latitude, lng:position.coords.longitude};
                     this.map = map;
-                    infoWindow.setPosition(pos);
-                    infoWindow.setContent('Your Location');
-                    infoWindow.open(map);
-                    map.setCenter(pos);
+                    me = new google.maps.Marker({
+                        position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+                        //animation: google.maps.Animation.DROP,
+                        map: map,
+                        icon: {
+                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                            strokeColor : '#FFCC00',
+                            strokeWeight : 5,
+                            scale: 2.5
+                        },
+                    });
+                    var meinfo = new google.maps.InfoWindow();
+                    google.maps.event.addListener(me, 'click', ((me) =>{
+                        return () => {
+                            meinfo.setContent(`${acc.name}`);
+                            meinfo.open(map, me);
+                        }
+                    })(me));
+                    map.setCenter({lat:position.coords.latitude, lng:position.coords.longitude});
                 }.bind(this), function() {
                     handleLocationError(true, infoWindow, map.getCenter());
                 });
@@ -115,7 +126,7 @@ class Index {
                 path: path,
                 geodesic: true,
                 strokeColor: '#FF0000',
-                strokeOpacity: 1.0,
+                strokeOpacity: 2.0,
                 strokeWeight: 2
             });
             flightPath.setMap(map);
@@ -228,10 +239,18 @@ class Index {
             }
             map.setCenter(center);
         }
-    }
-
-    handleDistanceDuration(){
-
+        window.addEventListener('deviceorientation', function(event) {
+            var alpha = null;
+            if (event.webkitCompassHeading) {
+                alpha = event.webkitCompassHeading;
+            }
+            else {
+                alpha = event.alpha;
+            }
+            var locationIcon = me.get('icon');
+            locationIcon.rotation = 360 - alpha;
+            me.set('icon', locationIcon);
+        }, true);
     }
 
     handleLocationError(browserHasGeolocation, infoWindow, pos) {
