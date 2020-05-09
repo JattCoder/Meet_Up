@@ -87,7 +87,7 @@
                 if (googleUser){
                     acc = new Account(googleUser);
                     favs = new Favorites();
-                    favs.add_to_maps(googleUser,home.map);
+                    favs.add_to_maps(googleUser);
                     document.getElementById("login_btn").style.display = 'none';
                     document.getElementById("logout_btn").value = googleUser.Pt["Ad"]+" - Signout";
                     document.getElementById("logout_btn").style.display = '';

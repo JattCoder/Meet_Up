@@ -1,6 +1,6 @@
 class Favorites {
 
-    add_to_maps(googleUser,map){
+    add_to_maps(googleUser){
         fetch('http://localhost:3000/maps/favorites/all', {  
             method: 'post',
             body: JSON.stringify({email: googleUser.Pt["yu"]}),
@@ -16,7 +16,7 @@ class Favorites {
                 marker = new google.maps.Marker({
                   position: new google.maps.LatLng(data[i].latitude, data[i].longitude),
                   animation: google.maps.Animation.DROP,
-                  map: map,
+                  map: home.map,
                   icon: 'https://img.icons8.com/emoji/48/000000/yellow-heart.png'
                 });
                 var geos = {'lat': data[i].latitude, 'lng': data[i].longitude}
@@ -25,7 +25,7 @@ class Favorites {
                     infoWindow.setContent(`${data[i].name}<br/>${data[i].address}</br></br>
                                 <a onclick='onSelection(${JSON.stringify(geos)})'>Directions</a> <br/>
                                 <a onclick='remove(${JSON.stringify(data[i])})'>Remove Favorite</a>`)
-                    infoWindow.open(map, marker);
+                    infoWindow.open(home.map, marker);
                   }
                 })(marker, i));
             }
