@@ -108,6 +108,8 @@ class Index {
                 handleLocationError(false, infoWindow, map.getCenter());
             }
         }else if(location[0]["overview_polyline"]!= null){
+            var startgeo,startaddress,midgeo,midaddress,endgeo,endaddress;
+            var middistance,midduration,enddistance,endduration;
             var path = google.maps.geometry.encoding.decodePath(location[0]["overview_polyline"]["points"]);
             var flightPath = new google.maps.Polyline({
                 path: path,
@@ -120,10 +122,23 @@ class Index {
             var bounds = new google.maps.LatLngBounds();
             for (var i = 0; i < path.length; i++) { bounds.extend(path[i]); }
             map.fitBounds(bounds);
-            var st = location[0]["legs"][0].start_location
-            var ed = location[0]["legs"][0].end_location
+            startgeo = location[0]["legs"][0].start_location;
+            startaddress = location[0]["legs"][0].start_address;
+            if(location[0].legs.length > 1){
+                midgeo = location[0]["legs"][1].start_location;
+                midaddress = location[0]["legs"][1].start_address;
+                endgeo = location[0]["legs"][1].end_location;
+                endaddress = location[0]["legs"][1].end_address;
+                enddistance = location[0].legs[1].distance.text
+                endduration = location[0].legs[1].duration.text
+            }else{
+                endgeo = location[0]["legs"][0].end_location;
+                endaddress = location[0]["legs"][0].end_address;
+                enddistance = location[0].legs[0].distance.text
+                endduration = location[0].legs[0].duration.text
+            }
             var start = new google.maps.Marker({
-                position: new google.maps.LatLng(st['lat'], st['lng']),
+                position: new google.maps.LatLng(startgeo['lat'], startgeo['lng']),
                 animation: google.maps.Animation.DROP,
                 map: map,
                 icon: 'https://img.icons8.com/ultraviolet/40/000000/marker.png'
@@ -135,26 +150,35 @@ class Index {
                     stinfo.open(map, start);
                 }
             })(start));
-            //var midpoint = new google.maps.Marker({
-            //    position: new google.maps.LatLng(location[i].Geopoints.lat, location[i].Geopoints.lng),
-            //    animation: google.maps.Animation.DROP,
-            //    map: map
-            //    icon: 'https://img.icons8.com/officel/40/000000/map-pin.png'
-            //});
+            if (location[0].legs.length > 1){
+                var midpoint = new google.maps.Marker({
+                    position: new google.maps.LatLng(midgeo['lat'], midgeo['lng']),
+                    animation: google.maps.Animation.DROP,
+                    map: map,
+                    icon: 'https://img.icons8.com/officel/40/000000/map-pin.png'
+                });
+                var mdinfo = new google.maps.InfoWindow();
+                google.maps.event.addListener(midpoint, 'click', ((midpoint) =>{
+                    return () => {
+                    mdinfo.setContent(`Destination</br></br>${midaddress}</br>
+                                       Distance: ${location[0].legs[0].distance.text}</br>
+                                       Duration: ${location[0].legs[1].duration.text}</br>`);
+                    mdinfo.open(map, midpoint);
+                }
+            })(midpoint));
+            }
             var destination = new google.maps.Marker({
-                position: new google.maps.LatLng(ed['lat'], ed['lng']),
+                position: new google.maps.LatLng(endgeo['lat'], endgeo['lng']),
                 animation: google.maps.Animation.DROP,
                 map: map,
                 icon: 'https://img.icons8.com/office/40/000000/marker.png'
             });
-            console.log(location[0])
-            //total distance, duration and estimated arrival
             var edinfo = new google.maps.InfoWindow();
             google.maps.event.addListener(destination, 'click', ((destination) =>{
                 return () => {
-                    edinfo.setContent(`Destination</br></br>${location[0]["legs"][0].end_address}</br>
-                                       Distance: ${location[0]["legs"][0].distance.text}</br>
-                                       Duration: ${location[0]["legs"][0].duration.text}</br>
+                    edinfo.setContent(`Destination</br></br>${endaddress}</br>
+                                       Distance: ${enddistance}</br>
+                                       Duration: ${endduration}</br>
                                        Estimated Arrival: </br></br>
                                        <a onclick='letsGo(${location[0]})'>Start</a>`);
                     edinfo.open(map, destination);
@@ -162,6 +186,7 @@ class Index {
             })(destination));
             new google.maps.event.trigger( start, 'click' );
             new google.maps.event.trigger( destination, 'click' );
+            new google.maps.event.trigger( midpoint, 'click' );
         }else{
             infoWindow = new google.maps.InfoWindow();
             var marker, i, center;
@@ -203,6 +228,10 @@ class Index {
             }
             map.setCenter(center);
         }
+    }
+
+    handleDistanceDuration(){
+
     }
 
     handleLocationError(browserHasGeolocation, infoWindow, pos) {

@@ -15,6 +15,7 @@ class NavigationController < ApplicationController
             retry_timeout: 40, 
             queries_per_second: 80
         )
+        waypoints = {lat: 41.4186983,lng: -81.7364368}
         render json: routes = gmaps.directions(
             start, 
             destination, 
