@@ -5,7 +5,7 @@ class Index {
         center: {lat: 40.674, lng: -73.945},
         zoom: 15,
         disableDefaultUI: true,
-        clickableIcons: false,
+        clickableIcons: true,
         styles: [
             {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
             {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
@@ -87,12 +87,19 @@ class Index {
             }]
         });
         map.draggable = true;
+        map.addListener('click', function(event) {
+            if (event.placeId) {
+                event.stop();
+                onMapSpot(event);
+              }
+        });
         if (location.length < 1){
             infoWindow = new google.maps.InfoWindow;
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     this.geopos = {lat:position.coords.latitude, lng:position.coords.longitude};
                     this.map = map;
+                    this.mdinfo = infoWindow;
                     me = new google.maps.Marker({
                         position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
                         //animation: google.maps.Animation.DROP,
@@ -125,7 +132,7 @@ class Index {
             var flightPath = new google.maps.Polyline({
                 path: path,
                 geodesic: true,
-                strokeColor: '#FF0000',
+                strokeColor: '#89CFF0',
                 strokeOpacity: 2.0,
                 strokeWeight: 2
             });
@@ -191,7 +198,8 @@ class Index {
                                        Distance: ${enddistance}</br>
                                        Duration: ${endduration}</br>
                                        Estimated Arrival: </br></br>
-                                       <a onclick='letsGo(${location[0]})'>Start</a>`);
+                                       <a onclick='letsGo()'>Start</a></br>
+                                       <a onclick='onLoad()'>Cancel</a>`);
                     edinfo.open(map, destination);
                 }
             })(destination));
@@ -239,6 +247,7 @@ class Index {
             }
             map.setCenter(center);
         }
+        if(location.length < 1){
         window.addEventListener('deviceorientation', function(event) {
             var alpha = null;
             if (event.webkitCompassHeading) {
@@ -251,6 +260,7 @@ class Index {
             locationIcon.rotation = 360 - alpha;
             me.set('icon', locationIcon);
         }, true);
+    }
     }
 
     handleLocationError(browserHasGeolocation, infoWindow, pos) {

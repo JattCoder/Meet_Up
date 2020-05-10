@@ -14,10 +14,15 @@ class Route {
                 }
                 return response.json();
         }).then(function(data){
+            this.route = data;
             home.loadmap(data);
             console.log(data)
-        }).catch(function(error){
+        }.bind(this)).catch(function(error){
                 console.log('Request failed', error);
         })
+    }
+
+    lets_roll(){
+        console.log(this.route);
     }
 }
