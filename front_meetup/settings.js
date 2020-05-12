@@ -1,5 +1,7 @@
 class Settings {
     save_settings(){
+        document.getElementById('loadfor').value = 'Saving'
+        document.getElementById('loading').style.display = '';
         var email = gapi.auth2.getAuthInstance().currentUser["je"].Pt.yu;
         var highway = document.getElementById('highways').checked;
         var tolls = document.getElementById('tolls').checked;
@@ -18,6 +20,7 @@ class Settings {
             }
         })
         .catch(function(error){
+            document.getElementById('loading').style.display = 'none';
             console.log('Request failed', error);
         });
     }

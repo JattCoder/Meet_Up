@@ -16,7 +16,8 @@ class Search {
             home.loadmap(data);
             this.all_locations = data;
         }.bind(this)).catch(function(error){
-                console.log('Request failed', error);
+            document.getElementById('loading').style.display = 'none';
+            console.log('Request failed', error);
         })
     }
 

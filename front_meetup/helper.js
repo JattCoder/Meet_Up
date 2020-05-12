@@ -10,6 +10,8 @@ function onLoad (){
 function onSearch (){
     var currentUser = gapi.auth2.getAuthInstance().currentUser.je.Pt;
     if (currentUser){
+        document.getElementById('loadfor').innerHTML = 'Searching';
+        document.getElementById('loading').style.display = '';
         search.spots(document.getElementById("search").value);
     }else{
         alert("Please Sign in!")
@@ -73,6 +75,10 @@ function signOut() {
         document.getElementById("logout_btn").style.display = 'none';
         document.getElementById("login_btn").style.display = '';
     });
+}
+
+function handleMotion(event){
+
 }
 
 function handleOrientation(event) {

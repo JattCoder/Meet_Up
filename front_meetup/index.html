@@ -7,6 +7,7 @@
     <script src="route.js"></script>
     <script src="favorites.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="loading.css">
     <head>
         <title>Meet Up</title>
     </head>
@@ -17,6 +18,27 @@
             <button id="btn" onclick="onSearch()">Search</button>
         </div>
         <button id="menu" onclick="onSettings()">Settings</button>
+        <div id="loading">
+            <div class='center'>
+                <div class="cssload-dots">
+                    <div class="cssload-dot"></div>
+                    <div class="cssload-dot"></div>
+                    <div class="cssload-dot"></div>
+                    <div class="cssload-dot"></div>
+                    <div class="cssload-dot"></div>
+                </div>
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <filter id="goo">
+                            <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="12" ></feGaussianBlur>
+                            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0	0 1 0 0 0	0 0 1 0 0	0 0 0 18 -7" result="goo" ></feColorMatrix>
+                            <!--<feBlend in2="goo" in="SourceGraphic" result="mix" ></feBlend>-->
+                        </filter>
+                    </defs>
+                </svg>
+                <h2 id='loadfor'>Loading</h2>
+            </div>
+        </div>
         <div id="menu_top">
             <div class="center" id="settings" style="text-align: center;">
                 <button id="login_btn" class="g-signin2" data-onsuccess="onSignIn">Login</button>

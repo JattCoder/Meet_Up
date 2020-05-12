@@ -86,6 +86,7 @@ class Index {
             stylers: [{color: '#17263c'}]
             }]
         });
+
         map.draggable = true;
         map.addListener('click', function(event) {
             if (event.placeId) {
@@ -96,7 +97,9 @@ class Index {
         if (location.length < 1){
             infoWindow = new google.maps.InfoWindow;
             if (navigator.geolocation) {
+                var timeoutVal = 10 * 1000 * 1000;
                 navigator.geolocation.getCurrentPosition(function(position) {
+                    console.log(position)
                     this.geopos = {lat:position.coords.latitude, lng:position.coords.longitude};
                     this.map = map;
                     this.mdinfo = infoWindow;
@@ -111,6 +114,7 @@ class Index {
                             scale: 2.5
                         },
                     });
+                    document.getElementById('loading').style.display = 'none';
                     var meinfo = new google.maps.InfoWindow();
                     google.maps.event.addListener(me, 'click', ((me) =>{
                         return () => {
@@ -119,11 +123,11 @@ class Index {
                         }
                     })(me));
                     map.setCenter({lat:position.coords.latitude, lng:position.coords.longitude});
-                }.bind(this), function() {
-                    handleLocationError(true, infoWindow, map.getCenter());
-                });
+                }.bind(this), function(error) {
+                    console.log(error.message);
+                },{ enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0 });
             } else {
-                handleLocationError(false, infoWindow, map.getCenter());
+                console.log("Geolocation not supported!")
             }
         }else if(location[0]["overview_polyline"]!= null){
             var startgeo,startaddress,midgeo,midaddress,endgeo,endaddress;
@@ -140,6 +144,7 @@ class Index {
             var bounds = new google.maps.LatLngBounds();
             for (var i = 0; i < path.length; i++) { bounds.extend(path[i]); }
             map.fitBounds(bounds);
+            document.getElementById('loading').style.display = 'none';
             startgeo = location[0]["legs"][0].start_location;
             startaddress = location[0]["legs"][0].start_address;
             if(location[0].legs.length > 1){
@@ -225,7 +230,7 @@ class Index {
                     }else{
                         infoWindow.setContent(`${location[i].Status}<br/><br/>${location[i].Name}<br/>${location[i].Address}
                             <br/>Rating: ${location[i].Rating} (${location[i].Total_Ratings})<br/><br/>
-                            <a onclick='onSelection(${JSON.stringify(location[i].Geopoints)})'>Directions</a> <br/>
+                            <a value='directions' onclick='onSelection(${JSON.stringify(location[i].Geopoints)})'>Directions</a> <br/>
                             <a onclick='toFav(${JSON.stringify(location[i])})'>Add to Favorites</a>`)
                     }
                     infoWindow.open(map, marker);
@@ -233,32 +238,24 @@ class Index {
                 })(marker, i));
                 spots.push({lat:location[i].Geopoints.lat, lng:location[i].Geopoints.lng});
             }
+            document.getElementById('loading').style.display = 'none';
             var bounds = new google.maps.LatLngBounds();
             for (var i = 0; i < spots.length; i++) { bounds.extend(spots[i]); }
             map.fitBounds(bounds);
-            console.log(spots)
         }
         if(location.length < 1){
-        window.addEventListener('deviceorientation', function(event) {
-            var alpha = null;
-            if (event.webkitCompassHeading) {
-                alpha = event.webkitCompassHeading;
-            }
-            else {
-                alpha = event.alpha;
-            }
-            var locationIcon = me.get('icon');
-            locationIcon.rotation = 360 - alpha;
-            me.set('icon', locationIcon);
-        }, true);
-    }
-    }
-
-    handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                  'Error: The Geolocation service failed.' :
-                  'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(map);
+            window.addEventListener('deviceorientation', function(event) {
+                var alpha = null;
+                if (event.webkitCompassHeading) {
+                    alpha = event.webkitCompassHeading;
+                }
+                else {
+                    alpha = event.alpha;
+                }
+                var locationIcon = me.get('icon');
+                locationIcon.rotation = 360 - alpha;
+                me.set('icon', locationIcon);
+            }, true);
+        }
     }
 }

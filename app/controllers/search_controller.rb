@@ -2,6 +2,8 @@ class SearchController < ApplicationController
 
     def places
         results = []
+        #input = params[:search].downcase.gsub('walk to') if params[:search].downcase.include?('walk')
+        #console.log('look at the page and look for note to work on for extra feature')
         client = GooglePlaces::Client.new(Rails.application.credentials.production[:api_key])
         client.spots_by_query(params[:search]).each do |business|
             info = {

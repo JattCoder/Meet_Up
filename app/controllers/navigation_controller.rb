@@ -26,10 +26,6 @@ class NavigationController < ApplicationController
             waypoints: '', #if user choose to share location and meetup will be figured out after looking through google contacts
             language: 'en' #default is en, will be able to change to different language
         )
-        #routes[0][:legs][0][:steps][0][:end_location]
-        routes[0][:legs][0][:steps].each do |coordinates|
-            coors << coordinates[:end_location]
-        end
         render json: routes
     end
 
