@@ -3,6 +3,7 @@ function onLoad (){
     document.getElementById("logout_btn").style.display = 'none';
     search = new Search();
     home = new Index;
+    favs = new Favorites();
     home.loadmap();
 }
 
@@ -22,18 +23,19 @@ function onMapSpot(event){
 
 function onSelection (geo){
     console.log(acc.email+"\nMy Location: "+home.geopos.lat+" : "+home.geopos.lng+"\nDestination: "+geo.lat+" : "+geo.lng);
-    route = new Route(geo);
+    route.get_route(geo);
 }
 
 function toFav(location){
     favs.add_new(location);
 }
 
-function letsGo(route){
-    //console.log(route);
-    //alert("lets go");
-    debugger
-    route.lets_roll;
+function unlike(location){
+    favs.remove(location);
+}
+
+function letsGo(){
+    route.lets_roll();
 }
 
 function onSettings (){
@@ -43,7 +45,6 @@ function onSettings (){
         document.getElementById("map").style.filter = ""
         next = new Settings();
         next.save_settings();
-        route = new Route();
     }else{
         document.getElementById("map").style.filter = "blur(3px)"
         document.getElementById("settings").style.display = '';
@@ -54,6 +55,7 @@ function onSignIn(googleUser) {
     if (googleUser){
         acc = new Account(googleUser);
         favs = new Favorites();
+        route = new Route();
         favs.add_to_maps(googleUser);
         document.getElementById("login_btn").style.display = 'none';
         document.getElementById("logout_btn").value = googleUser.Pt["Ad"]+" - Signout";

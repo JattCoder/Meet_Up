@@ -4,6 +4,7 @@ class NavigationController < ApplicationController
         highways = 'highways'
         ferries = 'ferries'
         tolls = 'tolls'
+        coors = []
         destination = [params[:destination][:lat],params[:destination][:lng]]
         start = [params[:start][:lat], params[:start][:lng]]
         settings = Setting.find_by(user_id: User.find_by(email: params[:email]).id)
@@ -16,25 +17,23 @@ class NavigationController < ApplicationController
             queries_per_second: 80
         )
         waypoints = {lat: 41.4186983,lng: -81.7364368}
-        render json: routes = gmaps.directions(
+        routes = gmaps.directions(
             start, 
             destination, 
             mode: 'driving', #default is driving, in future will be able to change to walking, transit or driving
             alternatives: false,
-            avoid: highways,
-            avoid: ferries,
-            avoid: tolls,
+            avoid: [highways, ferries, tolls],
             waypoints: '', #if user choose to share location and meetup will be figured out after looking through google contacts
             language: 'en' #default is en, will be able to change to different language
         )
-        
+        #routes[0][:legs][0][:steps][0][:end_location]
+        routes[0][:legs][0][:steps].each do |coordinates|
+            coors << coordinates[:end_location]
+        end
+        render json: routes
     end
 
-end
+    def check_contacts
 
-#bounds
-#legs
-#overview_polyline
-#summary
-#warnings
-#waypoint_order
+    end
+end

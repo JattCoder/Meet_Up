@@ -24,7 +24,7 @@ class Favorites {
                   return () => {
                     infoWindow.setContent(`${data[i].name}<br/>${data[i].address}</br></br>
                                 <a onclick='onSelection(${JSON.stringify(geos)})'>Directions</a> <br/>
-                                <a onclick='remove(${JSON.stringify(data[i])})'>Remove Favorite</a>`)
+                                <a onclick='unlike(${JSON.stringify(data[i])})'>Remove Favorite</a>`)
                     infoWindow.open(home.map, marker);
                   }
                 })(marker, i));
@@ -41,12 +41,34 @@ class Favorites {
             headers: {
                 'Content-Type': "application/json"
             },
+        }).then(function(res){
+            if(res.ok){
+                alert(location.Name+" was added");
+            }else{
+                throw res;
+            }
         }).catch(function(error){
-                console.log('Request failed', error);
+            alert(location.Name+" failed to add to your favorites.")
+            console.log('Request failed', error);
         })
     }
 
     remove(location){
-        console.log(location)
+        fetch('http://localhost:3000/maps/favorites/delete', {  
+            method: 'post',
+            body: JSON.stringify({id: location.id}),
+            headers: {
+                'Content-Type': "application/json"
+            },
+        }).then(function(res){
+            if(res.ok){
+                alert(location.Name+" was removed from favorites.");
+            }else{
+                throw res;
+            }
+        }).catch(function(error){
+                alert(location.Name+" failed to remove from favorites.")
+                console.log('Request failed', error);
+        })
     }
 }

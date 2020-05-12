@@ -1,28 +1,43 @@
 class Route {
-    constructor(destination){
-        this.current_position = home.geopos;
-        this.destination = destination;
-        fetch('http://localhost:3000/maps/navigation', {  
-            method: 'post',
-            body: JSON.stringify({start: home.geopos, destination, email: acc.email}),
-            headers: {
-                'Content-Type': "application/json"
-            },
-        }).then(function (response) {
-                if (!response.ok) {
-                    throw response;
-                }
-                return response.json();
-        }).then(function(data){
-            this.route = data;
-            home.loadmap(data);
-            console.log(data)
-        }.bind(this)).catch(function(error){
-                console.log('Request failed', error);
-        })
+    constructor(){
+        this.destination = {}
+    }
+    get_route(destination = {}){
+        if(Object.keys(destination).length != 0){
+            this.current_position = home.geopos;
+            this.destination = destination;
+            var googleObj = gapi.auth2.getAuthInstance();
+            var token = googleObj.currentUser.je.tc.access_token
+            fetch('http://localhost:3000/maps/navigation', {  
+                method: 'post',
+                body: JSON.stringify({start: home.geopos, destination, email: acc.email, token: token}),
+                headers: {
+                    'Content-Type': "application/json"
+                },
+            }).then(function (response) {
+                    if (!response.ok) {
+                        throw response;
+                    }
+                    return response.json();
+            }).then(function(data){
+                this.route = data;
+                home.loadmap(data);
+                console.log(data)
+            }.bind(this)).catch(function(error){
+                    console.log('Request failed', error);
+            })
+        }
     }
 
     lets_roll(){
-        console.log(this.route);
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: this.route[0].legs[0].start_location,
+            zoom: 18,
+            disableDefaultUI: true,
+            clickableIcons: false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            tilt: 45,
+            rotateControl: true
+            });
     }
 }

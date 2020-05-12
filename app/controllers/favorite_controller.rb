@@ -9,7 +9,7 @@ class FavoriteController < ApplicationController
     end
 
     def delete
-        
+        Favorite.find(params[:id]).destroy
     end
 
 end

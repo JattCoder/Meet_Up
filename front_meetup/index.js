@@ -131,7 +131,7 @@ class Index {
             var path = google.maps.geometry.encoding.decodePath(location[0]["overview_polyline"]["points"]);
             var flightPath = new google.maps.Polyline({
                 path: path,
-                geodesic: true,
+                geodesic: false,
                 strokeColor: '#89CFF0',
                 strokeOpacity: 2.0,
                 strokeWeight: 2
@@ -208,8 +208,8 @@ class Index {
             new google.maps.event.trigger( midpoint, 'click' );
         }else{
             infoWindow = new google.maps.InfoWindow();
-            var marker, i, center;
-            for (i = 0; i < location.length; i++) { 
+            var marker, i, center, spots = [];
+            for (i = 0; i < location.length; i++) {
                 marker = new google.maps.Marker({
                   position: new google.maps.LatLng(location[i].Geopoints.lat, location[i].Geopoints.lng),
                   animation: google.maps.Animation.DROP,
@@ -231,21 +231,12 @@ class Index {
                     infoWindow.open(map, marker);
                   }
                 })(marker, i));
+                spots.push({lat:location[i].Geopoints.lat, lng:location[i].Geopoints.lng});
             }
-            if (location.length == 1){
-                center = {
-                    lat: location[0].Geopoints.lat,
-                    lng: location[0].Geopoints.lng
-                }
-            }else{
-                var geo = location[location.length/2]
-                center = {
-                    lat: geo.Geopoints.lat,
-                    lng: geo.Geopoints.lng
-                }
-                map.setZoom(11);
-            }
-            map.setCenter(center);
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0; i < spots.length; i++) { bounds.extend(spots[i]); }
+            map.fitBounds(bounds);
+            console.log(spots)
         }
         if(location.length < 1){
         window.addEventListener('deviceorientation', function(event) {

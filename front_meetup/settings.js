@@ -10,12 +10,15 @@ class Settings {
             headers: {
                 'Content-Type': "application/json"
             },
-        }).catch(function(error){
+        }).then(function(res){
+            if(res.ok){
+                route.get_route(route.destination);
+            }else{
+                throw response;
+            }
+        })
+        .catch(function(error){
             console.log('Request failed', error);
         });
-    }
-
-    re_route(){
-
     }
 }
