@@ -19,7 +19,7 @@
         </div>
         <button id="menu" onclick="onSettings()">Settings</button>
         <div id="loading">
-            <div class='center'>
+            <div class='load_center'>
                 <div class="cssload-dots">
                     <div class="cssload-dot"></div>
                     <div class="cssload-dot"></div>
@@ -44,11 +44,19 @@
                 <button id="login_btn" class="g-signin2" data-onsuccess="onSignIn">Login</button>
                 <button id="logout_btn" onclick="signOut()">Signout</button>
                 <div id="contenta">
+                    <div class="custom-select" style="width:250px;">
+                        <select id="drivingMode">
+                          <option value="driving">Driving</option>
+                          <option value="walking">Walking</option>
+                          <option value="bicycling">Bicycling</option>
+                          <option value="transit">Transit</option>
+                        </select>
+                      </div>
                     <a class="set_heading">Avoid Highways<label class="switch">
                         <input type="checkbox" id="highways">
                         <span class="slider round"></span>
                     </label></a>
-                    <a class="set_heading">Avoid Tolls<label class="switch">
+                    <a class="set_heading">Avoid Highway Tolls<label class="switch">
                         <input type="checkbox" id="tolls">
                         <span class="slider round"></span>
                     </label></a>

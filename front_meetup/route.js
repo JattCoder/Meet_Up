@@ -4,6 +4,8 @@ class Route {
     }
     get_route(destination = {}){
         if(Object.keys(destination).length != 0){
+            var mode = document.getElementById("drivingMode");
+            var sel = mode.options[mode.selectedIndex].value;
             document.getElementById('loadfor').innerHTML = 'Finding Route';
             document.getElementById('loading').style.display = '';
             this.current_position = home.geopos;
@@ -12,7 +14,7 @@ class Route {
             var token = googleObj.currentUser.je.tc.access_token
             fetch('http://localhost:3000/maps/navigation', {  
                 method: 'post',
-                body: JSON.stringify({start: home.geopos, destination, email: acc.email, token: token}),
+                body: JSON.stringify({start: home.geopos, destination, email: acc.email, token: token, mode: sel}),
                 headers: {
                     'Content-Type': "application/json"
                 },
