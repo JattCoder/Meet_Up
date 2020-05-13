@@ -256,6 +256,18 @@ class Index {
                 locationIcon.rotation = 360 - alpha;
                 me.set('icon', locationIcon);
             }, true);
+            window.addEventListener('devicemotion', function(event) {
+                //console.log(event.acceleration.x + ' m/s2');
+                if(navigator.geolocation){
+                    navigator.geolocation.getCurrentPosition(function(position){
+                        var locationIcon = me.get('position');
+                        locationIcon.position = {lat:position.coords.latitude, lan:position.coords.longitude};
+                        me.set('position', locationIcon);
+                        console.log(me)
+                        
+                    })
+                }
+            });
         }
     }
 }
