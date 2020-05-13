@@ -25,15 +25,16 @@
     font-family: Verdana;
     outline: none;
     outline-width: 0;
-    height: 45px;
-    width: auto;
-    border-radius: 25px;
+    height: 75px;
+    width: 300px;
+    border-radius: 50px;
     border-style: offset;
     color: white;
     border: 3px;
     background: rgba(0,0,0,0.3);
     position: absolute;
     background-position: center;
+    font-size: 20px;
 }
 
 #btn {
@@ -43,16 +44,16 @@
     font-family: Verdana;
     outline: none;
     outline-width: 0;
-    height: 45px;
-    width: auto;
-    border-radius: 25px;
+    height: 75px;
+    width: 100px;
+    border-radius: 50px;
     border-style: offset;
     color: white;
     border: 3px;
     background: rgba(0,0,0,0.3);
     position: absolute;
     background-position: center;
-    margin-left: 230px;
+    margin-left: 320px;
 }
 
 #menu_top {
@@ -73,8 +74,8 @@
     font-family: Verdana;
     outline: none;
     outline-width: 0;
-    height: 45px;
-    width: auto;
+    height: 75px;
+    width: 100px;
     border-radius: 25px;
     border-style: offset;
     color: white;
