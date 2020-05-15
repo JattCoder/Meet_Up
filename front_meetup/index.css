@@ -25,7 +25,7 @@
     font-family: Verdana;
     outline: none;
     outline-width: 0;
-    height: 75px;
+    height: 55px;
     width: 300px;
     border-radius: 50px;
     border-style: offset;
@@ -44,7 +44,7 @@
     font-family: Verdana;
     outline: none;
     outline-width: 0;
-    height: 75px;
+    height: 55px;
     width: 100px;
     border-radius: 50px;
     border-style: offset;
@@ -74,7 +74,7 @@
     font-family: Verdana;
     outline: none;
     outline-width: 0;
-    height: 75px;
+    height: 55px;
     width: 100px;
     border-radius: 25px;
     border-style: offset;
@@ -157,10 +157,11 @@
   }
 
   .load_center {
-    margin: auto auto;
+    margin: 0 auto;
     width: auto;
     height: auto;
-    margin:  auto;
+    margin-left: 31%;
+    margin-top: 20%;
     border-radius: 3%;
     background: rgba(0,0,0,0.4);
     position: absolute;

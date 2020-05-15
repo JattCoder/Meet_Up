@@ -13,6 +13,7 @@ function onSearch (){
         document.getElementById('loadfor').innerHTML = 'Searching';
         document.getElementById('loading').style.display = '';
         search.spots(document.getElementById("search").value);
+        search.plot();
     }else{
         alert("Please Sign in!")
         onSettings();
@@ -24,7 +25,6 @@ function onMapSpot(event){
 }
 
 function onSelection (geo){
-    console.log(acc.email+"\nMy Location: "+home.geopos.lat+" : "+home.geopos.lng+"\nDestination: "+geo.lat+" : "+geo.lng);
     route.get_route(geo);
 }
 
@@ -34,6 +34,26 @@ function toFav(location){
 
 function unlike(location){
     favs.remove(location);
+}
+
+function addStop(geo){
+    route.waypoints.push(String(geo.Geopoints.lat+","+geo.Geopoints.lng))
+    route.get_route(route.destination);
+}
+
+function removeStop(index){
+    route.waypoints.splice(index, 1);
+    route.markers[index].setMap(null);
+    route.markers.splice(index, 1);
+    route.get_route(route.destination);
+}
+
+function cancelRoute(){
+    route.flightPath.setMap(null);
+    route.destination = [];
+    for(index in route.markers){ route.markers[index].setMap(null); }
+    home.map.setZoom(15);
+    home.map.setCenter(acc.geopos);
 }
 
 function letsGo(){
@@ -56,6 +76,7 @@ function onSettings (){
 function onSignIn(googleUser) {
     if (googleUser){
         acc = new Account(googleUser);
+        acc.plot();
         favs = new Favorites();
         route = new Route();
         favs.add_to_maps(googleUser);
@@ -77,26 +98,29 @@ function signOut() {
     });
 }
 
-function handleMotion(event){
-
-}
-
-function handleOrientation(event) {
-    var x = event.beta;
-    var y = event.gamma;
-    var z = event.alpha;
-    var absolute = event.absolute;
-    var rad = Math.atan2(y, x);
-    var deg = rad * (180 / Math.PI);
-    var screenOrientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
-    var angle = screenOrientation.angle || window.orientation || 0; 
-    deg = deg + angle; 
-    this.icon = {
-            path: window.google.maps.SymbolPath.ROUND_CLOSED_ARROW,
-            scale: 6,
-            fillColor: 'red',
-            fillOpacity: 0.8,
-            strokeWeight: 2,
-            rotation: deg
-    }
+function orienMotion(){
+    window.addEventListener('deviceorientation', function(event) {
+        var alpha = null;
+        if (event.webkitCompassHeading) {
+            alpha = event.webkitCompassHeading;
+        }
+        else {
+            alpha = event.alpha;
+        }
+        var locationIcon = acc.me.get('icon');
+        locationIcon.rotation = 360 - alpha;
+        acc.me.set('icon', locationIcon);
+    }, true);
+    window.addEventListener('devicemotion', function(event) {
+        //console.log(event.acceleration.x + ' m/s2');
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(function(position){
+                var locationIcon = acc.me.get('position');
+                locationIcon.position = {lat:position.coords.latitude, lan:position.coords.longitude};
+                acc.me.set('position', locationIcon);
+                home.map.setCenter({lat:position.coords.latitude, lan:position.coords.longitude})
+                acc.geopos = {lat:position.coords.latitude, lan:position.coords.longitude}
+            })
+        }
+    });
 }

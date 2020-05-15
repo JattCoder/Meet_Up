@@ -11,9 +11,10 @@ class Favorites {
                 if (!response.ok) { throw response; }
                 return response.json();
         }).then(function(data){
-            var marker, i, infoWindow = new google.maps.InfoWindow();
+            var i, infoWindow = new google.maps.InfoWindow();
+            this.markers = []
             for (i = 0; i < data.length; i++) { 
-                marker = new google.maps.Marker({
+                var marker = new google.maps.Marker({
                   position: new google.maps.LatLng(data[i].latitude, data[i].longitude),
                   animation: google.maps.Animation.DROP,
                   map: home.map,
@@ -28,6 +29,7 @@ class Favorites {
                     infoWindow.open(home.map, marker);
                   }
                 })(marker, i));
+                this.markers.push(marker)
             }
         }.bind(this)).catch(function(error){
                 console.log('Request failed', error);
