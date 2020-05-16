@@ -36,23 +36,30 @@ class Search {
                 return response.json();
         }).then(function(location){
                 this.infowindows = []
-                this.clkinfo = new google.maps.InfoWindow();
+                this.mapclk = []
+                document.getElementById('loading').style.display = 'none';
+                var clkinfo = new google.maps.InfoWindow();
+                if(route.route && Object.keys(route.route).length != 0){
+                    clkinfo.setContent(`${location.Status}<br/><br/>${location.Name}<br/>${location.Address}
+                            <br/>Rating: ${location.Rating} (${location.Total_Ratings})<br/><br/>
+                            <a onclick='addStop(${JSON.stringify(location)})'>Add Stop</a>`);
+                }else{
                     if(location.Status == null && location.Rating == null && location.Total_Ratings == null){
-                        this.clkinfo.setContent(`${location.Address}<br/><br/>
-                            <a onclick='onSelection(${JSON.stringify(location.Geopoints)})'>Directions</a> <br/>
-                            <a onclick='toFav(${JSON.stringify(location)})'>Add to Favorites</a>`);
+                        clkinfo.setContent(`${location.Address}<br/><br/>
+                        <a onclick='onSelection(${JSON.stringify(location.Geopoints)})'>Directions</a> <br/>
+                        <a onclick='toFav(${JSON.stringify(location)})'>Add to Favorites</a>`);
                     }else{
-                        this.clkinfo.setContent(`${location.Status}<br/><br/>${location.Name}<br/>${location.Address}
+                        clkinfo.setContent(`${location.Status}<br/><br/>${location.Name}<br/>${location.Address}
                             <br/>Rating: ${location.Rating} (${location.Total_Ratings})<br/><br/>
                             <a onclick='onSelection(${JSON.stringify(location.Geopoints)})'>Directions</a> <br/>
-                            <a onclick='toFav(${JSON.stringify(location)})'>Add to Favorites</a>`);
+                            <a onclick='toFav(${JSON.stringify(location)})'>Add to Favorites</a>`)
                     }
-                this.clkinfo.setPosition({lat: location.Geopoints.lat, lng:location.Geopoints.lng});
-                this.clkinfo.open(home.map, this);
-                this.clkinfo.open(home.map, this);
-            
+                }
+                clkinfo.setPosition({lat: location.Geopoints.lat, lng:location.Geopoints.lng});
+                clkinfo.open(home.map);
+                this.mapclk.push(clkinfo);
                 home.map.setCenter({lat: location.Geopoints.lat, lng:location.Geopoints.lng});
-                new google.maps.event.trigger( mdinfo, 'click' );
+                new google.maps.event.trigger( clkinfo, 'click' );
         }.bind(this)).catch(function(error){
                 console.log('Request failed', error);
         })
@@ -91,7 +98,7 @@ class Search {
             });
             google.maps.event.addListener(marker, 'click', ((marker, i) =>{
             return () => {
-                if(route.route){
+                if(route.route && Object.keys(route.route).length != 0){
                     infoWindow.setContent(`${location[i].Status}<br/><br/>${location[i].Name}<br/>${location[i].Address}
                             <br/>Rating: ${location[i].Rating} (${location[i].Total_Ratings})<br/><br/>
                             <a onclick='addStop(${JSON.stringify(location[i])})'>Add Stop</a>`);

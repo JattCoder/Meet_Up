@@ -8,6 +8,7 @@ function onLoad (){
 }
 
 function onSearch (){
+    if(search.mapclk) { search.mapclk[0].close(); }
     var currentUser = gapi.auth2.getAuthInstance().currentUser.je.Pt;
     if (currentUser){
         document.getElementById('loadfor').innerHTML = 'Searching';
@@ -25,18 +26,26 @@ function onMapSpot(event){
 }
 
 function onSelection (geo){
+    if(search.mapclk) { search.mapclk[0].close(); }
+    if(favs.infowindow) { for(var num in favs.infowindow) { favs.infowindow[num].close(); } }
+    if(favs.markers) { for(var num in favs.markers) { favs.markers[num].setMap(null) } }
     route.get_route(geo);
 }
 
 function toFav(location){
+    document.getElementById('loading').style.display = '';
+    document.getElementById('loadfor').innerHTML = 'Adding to Favorites';
     favs.add_new(location);
 }
 
 function unlike(location){
+    document.getElementById('loading').style.display = '';
+    document.getElementById('loadfor').innerHTML = 'Removing from Favorites';
     favs.remove(location);
 }
 
 function addStop(geo){
+    if(search.mapclk) { search.mapclk[0].close(); }
     route.waypoints.push(String(geo.Geopoints.lat+","+geo.Geopoints.lng))
     route.get_route(route.destination);
 }
@@ -59,6 +68,7 @@ function cancelRoute(){
     for(index in route.markers){ route.markers[index].setMap(null); }
     home.map.setZoom(15);
     home.map.setCenter(acc.geopos);
+    favs.plot();
 }
 
 function letsGo(){

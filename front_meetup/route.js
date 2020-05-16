@@ -29,8 +29,8 @@ class Route {
                 this.route = data;
                 if(this.flightPath){ this.flightPath.setMap(null); }
                 this.destination = destination;
-                this.plot(data[0]);
                 this.infowindow;
+                this.plot(data[0]);
             }.bind(this)).catch(function(error){
                 document.getElementById('loading').style.display = 'none';
                 console.log('Request failed', error);
@@ -73,6 +73,7 @@ class Route {
                                        <a onclick='letsGo()'>Start</a></br>
                                        <a onclick='cancelRoute()'>Cancel</a>`);
                     }else{
+                        debugger
                         edinfo.setContent(`Stop</br></br>${data.legs[i].end_address}</br>
                                        Distance: ${data.legs[i].distance.text}</br>
                                        Duration: ${data.legs[i].duration.text}</br></br>

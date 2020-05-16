@@ -88,13 +88,18 @@ class Index {
         });
         map.draggable = true;
         map.addListener('click', function(event) {
+            document.getElementById('loading').style.display = '';
+            document.getElementById('loadfor').innerHTML = 'Fetching Data';
             if (event.placeId) {
                 event.stop();
+                if(search.mapclk) { search.mapclk[0].close(); }
+                for(var num in favs.infowindow) { favs.infowindow[num].close(); }
                 onMapSpot(event);
               }
         });
         google.maps.event.addListenerOnce(map, 'idle', function(){
             this.map = map;
+            document.getElementById('loading').style.display = 'none';
         }.bind(this));
     }
 }
