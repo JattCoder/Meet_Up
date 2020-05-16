@@ -30,10 +30,31 @@ class NavigationController < ApplicationController
             avoid: [highways, ferries, tolls],
             waypoints: stops, #if user choose to share location and meetup will be figured out after looking through google contacts
             language: 'en', #default is en, will be able to change to different language
-            departure_time: Time.now
+            departure_time: Time.now,
+            units: 'imperial'
         )
         render json: routes
+    end
 
-        #waypoints: [{location: first, stopover: false},{location: second, stopover: false}],
+    def distance 
+        highways = 'highways'
+        ferries = 'ferries'
+        tolls = 'tolls'
+        mode = params[:mode]
+        destination = [params[:destination][:lat],params[:destination][:lng]]
+        start = [params[:start][:lat], params[:start][:lng]]
+        settings = Setting.find_by(user_id: User.find_by(email: params[:email]).id)
+        highways = '' if settings.highways == false
+        ferries = '' if settings.ferries == false
+        tolls = '' if settings.tolls == false
+        gmaps = GoogleMapsService::Client.new(
+            key: Rails.application.credentials.production[:api_key], 
+            retry_timeout: 40, 
+            queries_per_second: 80
+        )
+        render json: gmaps.distance_matrix(start, destination,
+            mode: mode,
+            language: 'en',
+            units: 'imperial')
     end
 end

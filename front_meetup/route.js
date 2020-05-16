@@ -4,9 +4,11 @@ class Route {
         this.waypoints = []
         this.markers = []
         this.infowindow = []
+        this.polywindow = []
     }
     get_route(destination = {}){
-        if(Object.keys(destination).length != 0){var mode = document.getElementById("drivingMode");
+        if(Object.keys(destination).length != 0){
+            var mode = document.getElementById("drivingMode");
             var sel = mode.options[mode.selectedIndex].value;
             document.getElementById('loadfor').innerHTML = 'Finding Route';
             document.getElementById('loading').style.display = '';
@@ -29,6 +31,7 @@ class Route {
                 this.points = []
                 this.route = data;
                 if(this.flightPath){ this.flightPath.setMap(null); }
+                if(this.polywindow){ for(var index in route.polywindow){ route.polywindow[index].close(); } }
                 this.destination = destination;
                 this.plot(data[0]);
             }.bind(this)).catch(function(error){
@@ -50,13 +53,31 @@ class Route {
             strokeOpacity: 2.0,
             strokeWeight: 2
         });
-        google.maps.event.addListener(this.flightPath, 'mouseover', function(e) {
-            polyinfo.setPosition(e.latLng);
-            polyinfo.setContent("You are at " + e.latLng);
-            polyinfo.open(home.map);
+        google.maps.event.addListener(route.flightPath, 'mouseover', function(e) {
+            var mode = document.getElementById("drivingMode");
+            var sel = mode.options[mode.selectedIndex].value;
+            fetch('http://localhost:3000/maps/distance', {  
+                method: 'post',
+                body: JSON.stringify({start: e.latLng, destination: route.destination, email: acc.email, mode: sel}),
+                headers: {
+                    'Content-Type': "application/json"
+                },
+            }).then(function (response) {
+                    if (!response.ok) { throw response; } return response.json();
+            }).then(function(data){
+                polyinfo.setPosition(e.latLng);
+                polyinfo.setContent("From: " + data.origin_addresses+"</br>To: "+data.destination_addresses
+                                    +"</br>Distance: "+data.rows[0].elements[0].distance.text+"</br>Duration: "
+                                    +data.rows[0].elements[0].duration.text);
+                polyinfo.open(home.map);
+                route.polywindow.push(polyinfo);
+            }.bind(this)).catch(function(error){
+                document.getElementById('loading').style.display = 'none';
+                console.log('Request failed', error);
+            })
         });
-        google.maps.event.addListener(this.flightPath, 'mouseout', function() {
-            polyinfo.close();
+        google.maps.event.addListener(route.flightPath, 'mouseout', function() {
+            for(var index in route.polywindow){ route.polywindow[index].close(); }
         });
         for (var i = 0; i < this.flightPath.getPath().getLength(); i++) { this.points.push(this.flightPath.getPath().getAt(i).toUrlValue(6)); }
         this.flightPath.setMap(home.map);
@@ -82,7 +103,6 @@ class Route {
                                        <a onclick='letsGo()'>Start</a></br>
                                        <a onclick='cancelRoute()'>Cancel</a>`);
                     }else{
-                        debugger
                         edinfo.setContent(`Stop</br></br>${data.legs[i].end_address}</br>
                                        Distance: ${data.legs[i].distance.text}</br>
                                        Duration: ${data.legs[i].duration.text}</br></br>
