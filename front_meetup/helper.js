@@ -26,6 +26,7 @@ function onMapSpot(event){
 }
 
 function onSelection (geo){
+    if(home.clk) { home.clk.close(); }
     if(search.mapclk) { search.mapclk[0].close(); }
     if(favs.infowindow) { for(var num in favs.infowindow) { favs.infowindow[num].close(); } }
     if(favs.markers) { for(var num in favs.markers) { favs.markers[num].setMap(null) } }
@@ -46,6 +47,7 @@ function unlike(location){
 
 function addStop(geo){
     if(search.mapclk) { search.mapclk[0].close(); }
+    if(home.clk) { home.clk.close(); }
     route.waypoints.push(String(geo.Geopoints.lat+","+geo.Geopoints.lng))
     route.get_route(route.destination);
 }
@@ -53,9 +55,7 @@ function addStop(geo){
 function removeStop(index){
     route.waypoints.splice(index, 1);
     route.markers[index+1].visible = false
-    google.maps.event.addListenerOnce( route.markers[index+1], "visible_changed", function() {
-        route.infoWindow.close();
-    });
+    route.infowindow[index+1].close();
     //route.markers[index].setMap(null);
     route.markers.splice(index, 1);
     route.get_route(route.destination);
@@ -69,14 +69,6 @@ function cancelRoute(){
     home.map.setZoom(15);
     home.map.setCenter(acc.geopos);
     favs.plot();
-}
-
-function mouseOnPoly(info){
-
-}
-
-function mouseOffPoly(info){
-    
 }
 
 function letsGo(){

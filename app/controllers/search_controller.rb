@@ -35,6 +35,17 @@ class SearchController < ApplicationController
         }
     end
 
+    def geocode 
+        results = []
+        gmaps = GoogleMapsService::Client.new(
+            key: Rails.application.credentials.production[:api_key], 
+            retry_timeout: 40, 
+            queries_per_second: 80
+        )
+        render json: gmaps.reverse_geocode(params[:geo])
+
+    end
+
     def distance (loc1, loc2)
         rad_per_deg = Math::PI/180  # PI / 180
         rkm = 6371                  # Earth radius in kilometers

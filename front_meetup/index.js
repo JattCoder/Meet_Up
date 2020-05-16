@@ -86,8 +86,10 @@ class Index {
             stylers: [{color: '#17263c'}]
             }]
         });
+        map.setOptions({ minZoom: 3, maxZoom: 18 });
         map.draggable = true;
         map.addListener('click', function(event) {
+            if(home.clk) { home.clk.close(); }
             document.getElementById('loading').style.display = '';
             document.getElementById('loadfor').innerHTML = 'Fetching Data';
             if (event.placeId) {
@@ -95,8 +97,34 @@ class Index {
                 if(search.mapclk) { search.mapclk[0].close(); }
                 for(var num in favs.infowindow) { favs.infowindow[num].close(); }
                 onMapSpot(event);
-              }
-        });
+            }else{
+                this.clk = new google.maps.InfoWindow();
+                fetch('http://localhost:3000/maps/geocode', {  
+                    method: 'post',
+                    body: JSON.stringify({geo: [event.latLng.lat(),event.latLng.lng()]}),
+                    headers: {
+                        'Content-Type': "application/json"
+                    },
+                }).then(function (response) {
+                    if (!response.ok) { throw response; } return response.json();
+                }).then(function(data){
+                    var geopoints = {lat: event.latLng.lat(), lng: event.latLng.lng()};
+                    if(route.route && Object.keys(route.route).length != 0){
+                        this.clk.setContent(`${data[0].formatted_address}<br/><br/>
+                            <a onclick='addStop(${JSON.stringify({Geopoints:{lat: geopoints.lat, lng: geopoints.lng}})})'>Add Stop</a>`)
+                    }else{
+                        this.clk.setContent(`${data[0].formatted_address}<br/><br/>
+                            <a onclick='onSelection(${JSON.stringify(geopoints)})'>Directions</a>`)
+                    }
+                    this.clk.setPosition(geopoints);
+                    this.clk.open(this.map);
+                    new google.maps.event.trigger( this.clk, 'click' );
+                    document.getElementById('loading').style.display = 'none';
+                }.bind(this)).catch(function(error){
+                        console.log('Request failed', error);
+                });
+            }
+        }.bind(this));
         google.maps.event.addListenerOnce(map, 'idle', function(){
             this.map = map;
             document.getElementById('loading').style.display = 'none';

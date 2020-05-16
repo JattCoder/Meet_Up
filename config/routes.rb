@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   post 'maps/places', to: 'search#places'
   post 'maps/spot', to: 'search#spot'
   post 'maps/search_route', to: 'search#route'
+  post 'maps/geocode', to:'search#geocode'
   post 'maps/favorites/new', to: 'favorite#new'
   post 'maps/favorites/delete', to: 'favorite#delete'
   post 'maps/favorites/all', to: 'favorite#all'

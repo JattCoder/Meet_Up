@@ -3,6 +3,7 @@ class Route {
         this.destination = {}
         this.waypoints = []
         this.markers = []
+        this.infowindow = []
     }
     get_route(destination = {}){
         if(Object.keys(destination).length != 0){var mode = document.getElementById("drivingMode");
@@ -29,7 +30,6 @@ class Route {
                 this.route = data;
                 if(this.flightPath){ this.flightPath.setMap(null); }
                 this.destination = destination;
-                this.infowindow;
                 this.plot(data[0]);
             }.bind(this)).catch(function(error){
                 document.getElementById('loading').style.display = 'none';
@@ -89,7 +89,7 @@ class Route {
                                        <a onclick='removeStop(${i})'>Remove Stop</a>`);
                     }
                     edinfo.open(home.map, marker);
-                    this.infowindow = edinfo;
+                    this.infowindow.push(edinfo);
                 }
             })(marker));
             new google.maps.event.trigger( marker, 'click' );
