@@ -71,6 +71,14 @@ function cancelRoute(){
     favs.plot();
 }
 
+function mouseOnPoly(info){
+
+}
+
+function mouseOffPoly(info){
+    
+}
+
 function letsGo(){
     route.lets_roll();
 }

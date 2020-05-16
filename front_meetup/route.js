@@ -39,6 +39,7 @@ class Route {
     }
 
     plot(data){
+        var polyinfo = new google.maps.InfoWindow();
         if(search.markers){ for (var i = 0; i < search.markers.length; i++){ search.markers[i].setMap(null);} }
         if(search.clkinfo) { this.clkinfo.close(); }
         var path = google.maps.geometry.encoding.decodePath(data["overview_polyline"]["points"]);
@@ -48,6 +49,14 @@ class Route {
             strokeColor: '#89CFF0',
             strokeOpacity: 2.0,
             strokeWeight: 2
+        });
+        google.maps.event.addListener(this.flightPath, 'mouseover', function(e) {
+            polyinfo.setPosition(e.latLng);
+            polyinfo.setContent("You are at " + e.latLng);
+            polyinfo.open(home.map);
+        });
+        google.maps.event.addListener(this.flightPath, 'mouseout', function() {
+            polyinfo.close();
         });
         for (var i = 0; i < this.flightPath.getPath().getLength(); i++) { this.points.push(this.flightPath.getPath().getAt(i).toUrlValue(6)); }
         this.flightPath.setMap(home.map);
