@@ -43,7 +43,11 @@ function addStop(geo){
 
 function removeStop(index){
     route.waypoints.splice(index, 1);
-    route.markers[index].setMap(null);
+    route.markers[index+1].visible = false
+    google.maps.event.addListenerOnce( route.markers[index+1], "visible_changed", function() {
+        route.infoWindow.close();
+    });
+    //route.markers[index].setMap(null);
     route.markers.splice(index, 1);
     route.get_route(route.destination);
 }
@@ -51,6 +55,7 @@ function removeStop(index){
 function cancelRoute(){
     route.flightPath.setMap(null);
     route.destination = [];
+    route.route = {};
     for(index in route.markers){ route.markers[index].setMap(null); }
     home.map.setZoom(15);
     home.map.setCenter(acc.geopos);
@@ -113,14 +118,16 @@ function orienMotion(){
     }, true);
     window.addEventListener('devicemotion', function(event) {
         //console.log(event.acceleration.x + ' m/s2');
+        var timeoutVal = 10 * 1000 * 1000;
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(function(position){
                 var locationIcon = acc.me.get('position');
-                locationIcon.position = {lat:position.coords.latitude, lan:position.coords.longitude};
+                locationIcon.position = {lat:position.coords.latitude, lng:position.coords.longitude};
                 acc.me.set('position', locationIcon);
-                home.map.setCenter({lat:position.coords.latitude, lan:position.coords.longitude})
-                acc.geopos = {lat:position.coords.latitude, lan:position.coords.longitude}
-            })
+                acc.geopos = {lat:position.coords.latitude, lng:position.coords.longitude}
+            }, function(error) {
+                alert(error.message);
+            },{ enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0 })
         }
     });
 }

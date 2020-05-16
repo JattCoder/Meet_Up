@@ -14,6 +14,7 @@ class Search {
                 return response.json();
         }).then(function(data){
             for (var i = 0; i < favs.markers.length; i++){ favs.markers[i].setMap(null);}
+            this.infowindows = []
             this.plot(data);
         }.bind(this)).catch(function(error){
             document.getElementById('loading').style.display = 'none';
@@ -34,6 +35,7 @@ class Search {
                 }
                 return response.json();
         }).then(function(location){
+                this.infowindows = []
                 this.clkinfo = new google.maps.InfoWindow();
                     if(location.Status == null && location.Rating == null && location.Total_Ratings == null){
                         this.clkinfo.setContent(`${location.Address}<br/><br/>

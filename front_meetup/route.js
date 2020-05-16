@@ -30,6 +30,7 @@ class Route {
                 if(this.flightPath){ this.flightPath.setMap(null); }
                 this.destination = destination;
                 this.plot(data[0]);
+                this.infowindow;
             }.bind(this)).catch(function(error){
                 document.getElementById('loading').style.display = 'none';
                 console.log('Request failed', error);
@@ -78,6 +79,7 @@ class Route {
                                        <a onclick='removeStop(${i})'>Remove Stop</a>`);
                     }
                     edinfo.open(home.map, marker);
+                    this.infowindow = edinfo;
                 }
             })(marker));
             new google.maps.event.trigger( marker, 'click' );
