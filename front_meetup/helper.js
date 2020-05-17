@@ -54,18 +54,19 @@ function addStop(geo){
 
 function removeStop(index){
     route.waypoints.splice(index, 1);
-    route.markers[index+1].visible = false
-    route.infowindow[index+1].close();
+    for(var index in route.markers){ route.markers[index].setMap(null); }
+    for(var index in route.infowindow){ route.infowindow[index].close(); }
+    for(var index in route.polywindow){ route.polywindow[index].close(); }
     //route.markers[index].setMap(null);
-    route.markers.splice(index, 1);
     route.get_route(route.destination);
 }
 
 function cancelRoute(){
     route.flightPath.setMap(null);
     route.destination = [];
+    route.waypoints = [];
     route.route = {};
-    for(index in route.markers){ route.markers[index].setMap(null); }
+    for(var index in route.markers){ route.markers[index].setMap(null); }
     home.map.setZoom(15);
     home.map.setCenter(acc.geopos);
     favs.plot();
@@ -138,6 +139,14 @@ function orienMotion(){
             }, function(error) {
                 alert(error.message);
             },{ enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0 })
+        }
+        if(route.route && Object.keys(route.route).length != 0){
+            if (!google.maps.geometry.poly.isLocationOnEdge(new google.maps.LatLng(acc.geopos.lat,acc.geopos.lng), route.flightPath, 0.00001)) {
+                setInterval(function(){
+                    route.get_route(route.destination);
+                    console.log('Time to re-route');
+                }, 10000);
+            }
         }
     });
 }

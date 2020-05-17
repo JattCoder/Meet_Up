@@ -26,7 +26,7 @@ class Route {
                     return response.json();
             }).then(function(data){
                 if(data.length < 1){
-                    alert('suggest you take flight to your destination.\nHere are nearby airports.')
+                    alert('suggest you to take flight to your destination.\nHere are nearby airports.')
                 }
                 this.points = []
                 this.route = data;
