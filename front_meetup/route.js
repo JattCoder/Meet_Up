@@ -37,8 +37,10 @@ class Route {
                 this.destination = destination;
                 this.plot(data[0]);
             }.bind(this)).catch(function(error){
-                document.getElementById('loading').style.display = 'none';
-                console.log('Request failed', error);
+                document.getElementById('loadfor').innerHTML = 'Failed to find Route';
+                setTimeout(function(){
+                    document.getElementById('loading').style.display = 'none';
+                },2000)
             })
         }else{ document.getElementById('loading').style.display = 'none'; }
     }
@@ -74,7 +76,10 @@ class Route {
                 polyinfo.open(home.map);
                 route.polywindow.push(polyinfo);
             }.bind(this)).catch(function(error){
-                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loadfor').innerHTML = error.Message;
+                setTimeout(function(){
+                    document.getElementById('loading').style.display = 'none';
+                },2000)
                 console.log('Request failed', error);
             })
         });

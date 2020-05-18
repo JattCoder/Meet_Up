@@ -19,7 +19,10 @@ class Account {
             if(tolls != data.tolls) document.getElementById('tolls').dispatchEvent(new MouseEvent("click"));
             if(ferries != data.ferries) document.getElementById('ferries').dispatchEvent(new MouseEvent("click"));
         }.bind(this)).catch(function(error){
-            console.log('Request failed', error);
+            document.getElementById('loadfor').innerHTML = 'Error';
+            setTimeout(function(){
+                document.getElementById('loading').style.display = 'none';
+            },2000)
         });
     }
 

@@ -17,8 +17,10 @@ class Search {
             this.infowindows = []
             this.plot(data);
         }.bind(this)).catch(function(error){
-            document.getElementById('loading').style.display = 'none';
-            console.log('Request failed', error);
+            document.getElementById('loadfor').innerHTML = 'Failed to find '+input;
+            setTimeout(function(){
+                document.getElementById('loading').style.display = 'none';
+            },2000)
         })
     }
 
@@ -61,7 +63,10 @@ class Search {
                 home.map.setCenter({lat: location.Geopoints.lat, lng:location.Geopoints.lng});
                 new google.maps.event.trigger( clkinfo, 'click' );
         }.bind(this)).catch(function(error){
-                console.log('Request failed', error);
+            document.getElementById('loadfor').innerHTML = 'Failed to get location information';
+            setTimeout(function(){
+                document.getElementById('loading').style.display = 'none';
+            },2000)
         })
         //console.log('You clicked on place:' + event.placeId + ', location: ' + event.latLng);
     }
@@ -75,11 +80,12 @@ class Search {
             },
         }).then(function (response) { if (!response.ok) { throw response; } return response.json();
         }).then(function(data){
-            console.log(data)
             this.plot(data);
         }.bind(this)).catch(function(error){
-            document.getElementById('loading').style.display = 'none';
-            console.log('Request failed', error);
+            document.getElementById('loadfor').innerHTML = 'Failed to find route';
+            setTimeout(function(){
+                document.getElementById('loading').style.display = 'none';
+            },2000)
         })
     }
 

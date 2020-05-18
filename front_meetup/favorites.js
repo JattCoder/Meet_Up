@@ -16,7 +16,10 @@ class Favorites {
             this.data = data;
             this.plot();
         }.bind(this)).catch(function(error){
-                console.log('Request failed', error);
+            document.getElementById('loadfor').innerHTML = 'Failed to fetch your Favorites';
+            setTimeout(function(){
+                document.getElementById('loading').style.display = 'none';
+            },2000)
         })
     }
 
@@ -60,9 +63,10 @@ class Favorites {
                 document.getElementById('loading').style.display = 'none';
             },2000)
         }.bind(this)).catch(function(error){
-            document.getElementById('loading').style.display = 'none';
-            alert(location.Name+" failed to add to your favorites.")
-            console.log('Request failed', error);
+            document.getElementById('loadfor').innerHTML = 'Failed to add '+location.Name;
+            setTimeout(function(){
+                document.getElementById('loading').style.display = 'none';
+            },2000)
         })
     }
 
@@ -85,8 +89,10 @@ class Favorites {
             for(var num in favs.infowindow) { favs.infowindow[num].close(); }
             favs.markers[index].setMap(null);
         }.bind(this)).catch(function(error){
-                alert(location.name+" failed to remove from favorites.")
-                console.log('Request failed', error);
+            document.getElementById('loadfor').innerHTML = 'Failed to remove '+location.name;
+            setTimeout(function(){
+                document.getElementById('loading').style.display = 'none';
+            },2000)
         })
     }
 }
