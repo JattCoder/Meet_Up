@@ -27,6 +27,8 @@ class Route {
             }).then(function(data){
                 if(data.length < 1){
                     alert('suggest you to take flight to your destination.\nHere are nearby airports.')
+                    search.spots('airport');
+                    search.plot();
                 }
                 this.points = []
                 this.route = data;
