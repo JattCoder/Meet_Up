@@ -8,8 +8,7 @@ function onLoad (){
 }
 
 function onSearch (){
-    if(search.mapclk) { search.mapclk[0].close(); }
-    var currentUser = gapi.auth2.getAuthInstance().currentUser.je.Pt;
+    let currentUser = gapi.auth2.getAuthInstance().currentUser.je.Pt;
     if (currentUser){
         document.getElementById('loadfor').innerHTML = 'Searching';
         document.getElementById('loading').style.display = '';
@@ -26,10 +25,10 @@ function onMapSpot(event){
 }
 
 function onSelection (geo){
-    if(home.clk) { home.clk.close(); }
-    if(search.mapclk) { search.mapclk[0].close(); }
-    if(favs.infowindow) { for(var num in favs.infowindow) { favs.infowindow[num].close(); } }
-    if(favs.markers) { for(var num in favs.markers) { favs.markers[num].setMap(null) } }
+    if(home.clks.length > 0) for(let index in home.clks) home.clks[index].close();
+    if(search.mapclk.length > 0) for(let index in search.mapclk) search.mapclk[index].close();
+    if(favs.infowindow.length > 0) for(let index in favs.infowindow) favs.infowindow[index].close();
+    if(favs.markers.length > 0) { for(let index in favs.markers) { favs.markers[index].setMap(null) } }
     route.get_route(geo);
 }
 
@@ -46,17 +45,17 @@ function unlike(location){
 }
 
 function addStop(geo){
-    if(search.mapclk) { search.mapclk[0].close(); }
-    if(home.clk) { home.clk.close(); }
+    if(home.clks.length > 0) for(let index in home.clks) home.clks[index].close();
+    if(search.mapclk.length > 0) for(let index in search.mapclk) search.mapclk[index].close();
     route.waypoints.push(String(geo.Geopoints.lat+","+geo.Geopoints.lng))
     route.get_route(route.destination);
 }
 
 function removeStop(index){
     route.waypoints.splice(index, 1);
-    for(var index in route.markers){ route.markers[index].setMap(null); }
-    for(var index in route.infowindow){ route.infowindow[index].close(); }
-    for(var index in route.polywindow){ route.polywindow[index].close(); }
+    for(let index in route.markers){ route.markers[index].setMap(null); }
+    for(let index in route.infowindow){ route.infowindow[index].close(); }
+    for(let index in route.polywindow){ route.polywindow[index].close(); }
     //route.markers[index].setMap(null);
     route.get_route(route.destination);
 }
@@ -66,7 +65,7 @@ function cancelRoute(){
     route.destination = [];
     route.waypoints = [];
     route.route = {};
-    for(var index in route.markers){ route.markers[index].setMap(null); }
+    for(let index in route.markers){ route.markers[index].setMap(null); }
     home.map.setZoom(15);
     home.map.setCenter(acc.geopos);
     favs.plot();
@@ -77,7 +76,7 @@ function letsGo(){
 }
 
 function onSettings (){
-    var settings = document.getElementById("settings").style.display;
+    let settings = document.getElementById("settings").style.display;
     if (settings == ''){
         document.getElementById("settings").style.display = 'none';
         document.getElementById("map").style.filter = ""
@@ -105,8 +104,8 @@ function onSignIn(googleUser) {
 }
 
 function signOut() {
-    var googleObj = gapi.auth2.getAuthInstance();
-    var name = googleObj.currentUser.je["Pt"]["Ad"];
+    let googleObj = gapi.auth2.getAuthInstance();
+    let name = googleObj.currentUser.je["Pt"]["Ad"];
     googleObj.signOut().then(function () {
         alert(name+' signed out.');
         document.getElementById("logout_btn").style.display = 'none';
@@ -116,23 +115,23 @@ function signOut() {
 
 function orienMotion(){
     window.addEventListener('deviceorientation', function(event) {
-        var alpha = null;
+        let alpha = null;
         if (event.webkitCompassHeading) {
             alpha = event.webkitCompassHeading;
         }
         else {
             alpha = event.alpha;
         }
-        var locationIcon = acc.me.get('icon');
+        let locationIcon = acc.me.get('icon');
         locationIcon.rotation = 360 - alpha;
         acc.me.set('icon', locationIcon);
     }, true);
     window.addEventListener('devicemotion', function(event) {
         //console.log(event.acceleration.x + ' m/s2');
-        var timeoutVal = 10 * 1000 * 1000;
+        let timeoutVal = 10 * 1000 * 1000;
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(function(position){
-                var locationIcon = acc.me.get('position');
+                let locationIcon = acc.me.get('position');
                 locationIcon.position = {lat:position.coords.latitude, lng:position.coords.longitude};
                 acc.me.set('position', locationIcon);
                 acc.geopos = {lat:position.coords.latitude, lng:position.coords.longitude}

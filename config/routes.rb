@@ -10,11 +10,13 @@ Rails.application.routes.draw do
   post 'maps/spot', to: 'search#spot'
   post 'maps/search_route', to: 'search#route'
   post 'maps/geocode', to:'search#geocode'
-  post 'maps/favorites/new', to: 'favorite#new'
-  post 'maps/favorites/delete', to: 'favorite#delete'
-  post 'maps/favorites/all', to: 'favorite#all'
-  post 'user/new', to: 'user#new'
+  post 'maps/favorites', to: 'favorite#create'
+  delete 'maps/favorites/:id', to: 'favorite#delete'
+  get 'maps/favorites', to: 'favorite#all'
+  post 'user', to: 'user#create'
   post 'user/settings', to: 'setting#update_settings'
   resources :cats
   get 'logout', to: 'sessions#destroy', as: 'logout'
+  #new --> get
+  #create --> post
 end

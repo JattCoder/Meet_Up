@@ -1,6 +1,9 @@
 class Index {
+  constructor(){
+      this.clks = []
+  }
   loadmap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
+    const map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 40.674, lng: -73.945},
         zoom: 15,
         disableDefaultUI: true,
@@ -89,16 +92,17 @@ class Index {
         map.setOptions({ minZoom: 3, maxZoom: 18 });
         map.draggable = true;
         map.addListener('click', function(event) {
-            if(home.clk) { home.clk.close(); }
+            if(this.clks) for(let index in this.clks) this.clks[index].close();
+            if(search.mapclk.length > 0) for(let index in search.mapclk) search.mapclk[index].close();
+            if(favs.infowindow.length > 0) for(let index in favs.infowindow) favs.infowindow[index].close();
             document.getElementById('loading').style.display = '';
             document.getElementById('loadfor').innerHTML = 'Fetching Data';
             if (event.placeId) {
                 event.stop();
-                if(search.mapclk) { search.mapclk[0].close(); }
-                for(var num in favs.infowindow) { favs.infowindow[num].close(); }
+                for(let num in favs.infowindow) { favs.infowindow[num].close(); }
                 onMapSpot(event);
             }else{
-                this.clk = new google.maps.InfoWindow();
+                const clk = new google.maps.InfoWindow();
                 fetch('http://localhost:3000/maps/geocode', {  
                     method: 'post',
                     body: JSON.stringify({geo: [event.latLng.lat(),event.latLng.lng()]}),
@@ -108,18 +112,19 @@ class Index {
                 }).then(function (response) {
                     if (!response.ok) { throw response; } return response.json();
                 }).then(function(data){
-                    var geopoints = {lat: event.latLng.lat(), lng: event.latLng.lng()};
+                    let geopoints = {lat: event.latLng.lat(), lng: event.latLng.lng()};
                     if(route.route && Object.keys(route.route).length != 0){
-                        this.clk.setContent(`${data[0].formatted_address}<br/><br/>
+                        clk.setContent(`${data[0].formatted_address}<br/><br/>
                             <a onclick='addStop(${JSON.stringify({Geopoints:{lat: geopoints.lat, lng: geopoints.lng}})})'>Add Stop</a>`)
                     }else{
-                        this.clk.setContent(`${data[0].formatted_address}<br/><br/>
+                        clk.setContent(`${data[0].formatted_address}<br/><br/>
                             <a onclick='onSelection(${JSON.stringify(geopoints)})'>Directions</a>`)
                     }
-                    this.clk.setPosition(geopoints);
-                    this.clk.open(this.map);
+                    clk.setPosition(geopoints);
+                    clk.open(this.map);
                     new google.maps.event.trigger( this.clk, 'click' );
                     document.getElementById('loading').style.display = 'none';
+                    this.clks.push(clk)
                 }.bind(this)).catch(function(error){
                         console.log('Request failed', error);
                 });

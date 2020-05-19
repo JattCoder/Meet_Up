@@ -1,5 +1,11 @@
 class Search {
 
+    constructor(){
+        this.infowindows = [];
+        this.markers = [];
+        this.mapclk = [];
+    }
+
     spots(input){
         fetch('http://localhost:3000/maps/places', {  
             method: 'post',
@@ -13,8 +19,10 @@ class Search {
                 }
                 return response.json();
         }).then(function(data){
-            for (var i = 0; i < favs.markers.length; i++){ favs.markers[i].setMap(null);}
-            this.infowindows = []
+            for (let i = 0; i < favs.markers.length; i++){ favs.markers[i].setMap(null);}
+            if(home.clks) for(let index in home.clks) home.clks[index].close();
+            if(this.mapclk.length > 0) for(let index in this.mapclk) this.mapclk[index].close();
+            if(favs.infowindow.length > 0) for(let index in favs.infowindow) favs.infowindow[index].close();
             this.plot(data);
         }.bind(this)).catch(function(error){
             document.getElementById('loadfor').innerHTML = 'Failed to find '+input;
@@ -37,10 +45,8 @@ class Search {
                 }
                 return response.json();
         }).then(function(location){
-                this.infowindows = []
-                this.mapclk = []
                 document.getElementById('loading').style.display = 'none';
-                var clkinfo = new google.maps.InfoWindow();
+                const clkinfo = new google.maps.InfoWindow();
                 if(route.route && Object.keys(route.route).length != 0){
                     clkinfo.setContent(`${location.Status}<br/><br/>${location.Name}<br/>${location.Address}
                             <br/>Rating: ${location.Rating} (${location.Total_Ratings})<br/><br/>
@@ -60,7 +66,7 @@ class Search {
                 clkinfo.setPosition({lat: location.Geopoints.lat, lng:location.Geopoints.lng});
                 clkinfo.open(home.map);
                 this.mapclk.push(clkinfo);
-                home.map.setCenter({lat: location.Geopoints.lat, lng:location.Geopoints.lng});
+                //home.map.setCenter({lat: location.Geopoints.lat, lng:location.Geopoints.lng});
                 new google.maps.event.trigger( clkinfo, 'click' );
         }.bind(this)).catch(function(error){
             document.getElementById('loadfor').innerHTML = 'Failed to get location information';
@@ -90,13 +96,13 @@ class Search {
     }
 
     plot(location = []){
-        var infoWindow = new google.maps.InfoWindow();
-        var i, spots = [];
-        if(this.markers){ for (var i = 0; i < this.markers.length; i++){ this.markers[i].setMap(null);} }
+        const infoWindow = new google.maps.InfoWindow();
+        if(this.markers){ for (let index in this.markers.length){ this.markers[index].setMap(null);} }
         if(this.clkinfo) { this.clkinfo.close(); }
-        this.markers = []
+        let i;
+        let spots = [];
         for (i = 0; i < location.length; i++) {
-            var marker = new google.maps.Marker({
+            const marker = new google.maps.Marker({
                 position: new google.maps.LatLng(location[i].Geopoints.lat, location[i].Geopoints.lng),
                 animation: google.maps.Animation.DROP,
                 map: home.map,
@@ -126,8 +132,8 @@ class Search {
             spots.push({lat:location[i].Geopoints.lat, lng:location[i].Geopoints.lng});
         }
         document.getElementById('loading').style.display = 'none';
-        var bounds = new google.maps.LatLngBounds();
-        for (var i = 0; i < spots.length; i++) { bounds.extend(spots[i]); }
+        const bounds = new google.maps.LatLngBounds();
+        for (let i = 0; i < spots.length; i++) { bounds.extend(spots[i]); }
         if(spots.length >= 1) { home.map.fitBounds(bounds); }
     }
 }

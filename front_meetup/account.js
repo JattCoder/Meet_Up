@@ -1,6 +1,6 @@
 class Account {
     constructor(googleUser) {
-        fetch('http://localhost:3000/user/new', {  
+        fetch('http://localhost:3000/user', {  
             method: 'post',
             body: JSON.stringify({name:googleUser.Pt["Ad"], email:googleUser.Pt["yu"], uid:googleUser.Pt["MU"], image:googleUser.Pt["QK"]}),
             headers: {
@@ -12,9 +12,9 @@ class Account {
         }).then(function(data){
             this.email = googleUser.Pt["yu"]
             this.name = googleUser.Pt["Ad"]
-            var highway = document.getElementById('highways').checked;
-            var tolls = document.getElementById('tolls').checked;
-            var ferries = document.getElementById('ferries').checked;
+            let highway = document.getElementById('highways').checked;
+            let tolls = document.getElementById('tolls').checked;
+            let ferries = document.getElementById('ferries').checked;
             if(highway != data.highways) document.getElementById('highways').dispatchEvent(new MouseEvent("click"));
             if(tolls != data.tolls) document.getElementById('tolls').dispatchEvent(new MouseEvent("click"));
             if(ferries != data.ferries) document.getElementById('ferries').dispatchEvent(new MouseEvent("click"));
@@ -28,7 +28,7 @@ class Account {
 
     plot(){
             if (navigator.geolocation) {
-                var timeoutVal = 10 * 1000 * 1000;
+                let timeoutVal = 10 * 1000 * 1000;
                 orienMotion();
                 navigator.geolocation.getCurrentPosition(function(position) {
                     this.geopos = {lat:position.coords.latitude, lng:position.coords.longitude};
@@ -43,9 +43,9 @@ class Account {
                             scale: 2.5
                         },
                     });
-                    var me = this.me;
+                    let me = this.me;
                     document.getElementById('loading').style.display = 'none';
-                    var meinfo = new google.maps.InfoWindow();
+                    const meinfo = new google.maps.InfoWindow();
                     google.maps.event.addListener(me, 'click', ((me) =>{
                         return () => {
                             meinfo.setContent(`${this.name}`);

@@ -1,6 +1,6 @@
 class UserController < ApplicationController
 
-    def new
+    def create
         settings = {}
         user = User.find_by(email: params[:email])
         if user == nil
@@ -12,7 +12,8 @@ class UserController < ApplicationController
                 end
             end
         end
-        profile_settings = Setting.find_by(user_id: user.id)
+        session[:user_id] = user.id
+        profile_settings = Setting.find_by(user_id: current_user.id)
         settings = {
             "location" => profile_settings.location_share,
             "ferries" => profile_settings.ferries,

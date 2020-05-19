@@ -8,11 +8,11 @@ class Route {
     }
     get_route(destination = {}){
         if(Object.keys(destination).length != 0){
-            var mode = document.getElementById("drivingMode");
-            var sel = mode.options[mode.selectedIndex].value;
+            let mode = document.getElementById("drivingMode");
+            let sel = mode.options[mode.selectedIndex].value;
             document.getElementById('loadfor').innerHTML = 'Finding Route';
             document.getElementById('loading').style.display = '';
-            var token = gapi.auth2.getAuthInstance().currentUser.je.tc.access_token;
+            let token = gapi.auth2.getAuthInstance().currentUser.je.tc.access_token;
             fetch('http://localhost:3000/maps/navigation', {  
                 method: 'post',
                 body: JSON.stringify({start: acc.geopos, destination, email: acc.email, token: token, mode: sel, stops: this.waypoints}),
@@ -32,8 +32,9 @@ class Route {
                 }
                 this.points = []
                 this.route = data;
-                if(this.flightPath){ this.flightPath.setMap(null); }
-                if(this.polywindow){ for(var index in route.polywindow){ route.polywindow[index].close(); } }
+                if(this.flightPath) this.flightPath.setMap(null); 
+                if(this.polywindow) for(let index in this.polywindow) route.polywindow[index].close(); 
+                if(this.markers) for(let index in this.markers) this.markers[index].setMap(null)
                 this.destination = destination;
                 this.plot(data[0]);
             }.bind(this)).catch(function(error){
@@ -46,10 +47,10 @@ class Route {
     }
 
     plot(data){
-        var polyinfo = new google.maps.InfoWindow();
-        if(search.markers){ for (var i = 0; i < search.markers.length; i++){ search.markers[i].setMap(null);} }
+        let polyinfo = new google.maps.InfoWindow();
+        if(search.markers){ for (let i = 0; i < search.markers.length; i++){ search.markers[i].setMap(null);} }
         if(search.clkinfo) { this.clkinfo.close(); }
-        var path = google.maps.geometry.encoding.decodePath(data["overview_polyline"]["points"]);
+        let path = google.maps.geometry.encoding.decodePath(data["overview_polyline"]["points"]);
         this.flightPath = new google.maps.Polyline({
             path: path,
             geodesic: false,
@@ -58,8 +59,8 @@ class Route {
             strokeWeight: 2
         });
         google.maps.event.addListener(route.flightPath, 'mouseover', function(e) {
-            var mode = document.getElementById("drivingMode");
-            var sel = mode.options[mode.selectedIndex].value;
+            let mode = document.getElementById("drivingMode");
+            let sel = mode.options[mode.selectedIndex].value;
             fetch('http://localhost:3000/maps/distance', {  
                 method: 'post',
                 body: JSON.stringify({start: e.latLng, destination: route.destination, email: acc.email, mode: sel}),
@@ -84,23 +85,23 @@ class Route {
             })
         });
         google.maps.event.addListener(route.flightPath, 'mouseout', function() {
-            for(var index in route.polywindow){ route.polywindow[index].close(); }
+            for(let index in route.polywindow){ route.polywindow[index].close(); }
         });
-        for (var i = 0; i < this.flightPath.getPath().getLength(); i++) { this.points.push(this.flightPath.getPath().getAt(i).toUrlValue(6)); }
+        for (let i = 0; i < this.flightPath.getPath().getLength(); i++) { this.points.push(this.flightPath.getPath().getAt(i).toUrlValue(6)); }
         this.flightPath.setMap(home.map);
-        var bounds = new google.maps.LatLngBounds();
-        for (var i = 0; i < path.length; i++) { bounds.extend(path[i]); }
+        let bounds = new google.maps.LatLngBounds();
+        for (let i = 0; i < path.length; i++) { bounds.extend(path[i]); }
         home.map.fitBounds(bounds);
-        for(var i = 0; i < data.legs.length; i++){
+        for(let i = 0; i < data.legs.length; i++){
             //steps = data.legs[i].steps
             //endlocation = data.legs[i].end_location
-            var marker = new google.maps.Marker({
+            const marker = new google.maps.Marker({
                 position: new google.maps.LatLng(data.legs[i].end_location.lat, data.legs[i].end_location.lng),
                 animation: google.maps.Animation.DROP,
                 map: home.map,
                 icon: 'https://img.icons8.com/ultraviolet/40/000000/marker.png'
             });
-            var edinfo = new google.maps.InfoWindow();
+            const edinfo = new google.maps.InfoWindow();
             google.maps.event.addListener(marker, 'click', ((marker) =>{
                 return () => {
                     if(i == (data.legs.length - 1)){

@@ -2,10 +2,10 @@ class Settings {
     save_settings(){
         document.getElementById('loadfor').value = 'Saving'
         document.getElementById('loading').style.display = '';
-        var email = gapi.auth2.getAuthInstance().currentUser["je"].Pt.yu;
-        var highway = document.getElementById('highways').checked;
-        var tolls = document.getElementById('tolls').checked;
-        var ferries = document.getElementById('ferries').checked;
+        let email = gapi.auth2.getAuthInstance().currentUser["je"].Pt.yu;
+        let highway = document.getElementById('highways').checked;
+        let tolls = document.getElementById('tolls').checked;
+        let ferries = document.getElementById('ferries').checked;
         fetch('http://localhost:3000/user/settings', {  
             method: 'post',
             body: JSON.stringify({highway, tolls, ferries, email}),

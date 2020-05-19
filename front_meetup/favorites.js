@@ -1,18 +1,19 @@
 class Favorites {
 
+    constructor(){
+        this.markers = []
+        this.infowindow = []
+        this.data = []
+    }
+
     add_to_maps(googleUser){
-        fetch('http://localhost:3000/maps/favorites/all', {  
-            method: 'post',
-            body: JSON.stringify({email: googleUser.Pt["yu"]}),
-            headers: {
-                'Content-Type': "application/json"
-            },
-        }).then(function (response) {
-                if (!response.ok) { throw response; }
-                return response.json();
+        let get = new URL("http://localhost:3000/maps/favorites"),
+            params = {email: googleUser.Pt.yu}
+            Object.keys(params).forEach(key => get.searchParams.append(key, params[key]))
+        fetch(get).then(function (response) {
+            if (!response.ok) { throw response; }
+            return response.json();
         }).then(function(data){
-            this.markers = []
-            this.infowindow = []
             this.data = data;
             this.plot();
         }.bind(this)).catch(function(error){
@@ -23,22 +24,28 @@ class Favorites {
         })
     }
 
+    //read me
+    //use es6
+    
+
     plot(){
-        var data = this.data;
-        var i, infoWindow = new google.maps.InfoWindow();
+        let data = this.data;
+        let i, infoWindow = new google.maps.InfoWindow();
         for (i = 0; i < data.length; i++) { 
-            var marker = new google.maps.Marker({
+            let marker = new google.maps.Marker({
               position: new google.maps.LatLng(data[i].latitude, data[i].longitude),
               animation: google.maps.Animation.DROP,
               map: home.map,
               icon: 'https://img.icons8.com/emoji/48/000000/yellow-heart.png'
             });
-            var geos = {'lat': data[i].latitude, 'lng': data[i].longitude}
+            let geos = {'lat': data[i].latitude, 'lng': data[i].longitude}
             google.maps.event.addListener(marker, 'click', ((marker, i) =>{
               return () => {
+                if(home.clks) for(let index in home.clks) home.clks[index].close();
+                if(search.mapclk.length > 0) for(let index in search.mapclk) search.mapclk[index].close();
                 infoWindow.setContent(`${data[i].name}<br/>${data[i].address}</br></br>
                             <a onclick='onSelection(${JSON.stringify(geos)})'>Directions</a> <br/>
-                            <a onclick='unlike(${JSON.stringify(i)})'>Remove Favorite</a>`)
+                            <a onclick='unlike(${JSON.stringify(data[i])})'>Remove Favorite</a>`)
                 infoWindow.open(home.map, marker);
               }
             })(marker, i));
@@ -48,7 +55,7 @@ class Favorites {
     }
 
     add_new(location){
-        fetch('http://localhost:3000/maps/favorites/new', {  
+        fetch('http://localhost:3000/maps/favorites', {  
             method: 'post',
             body: JSON.stringify({name: location.Name, address: location.Address, geo: location.Geopoints, email: acc.email}),
             headers: {
@@ -59,6 +66,7 @@ class Favorites {
         }).then(function(data){
             this.data = data;
             document.getElementById('loadfor').innerHTML = location.Name+' Added';
+            for(let index in search.infowindows) { search.infowindows[index].close(); fav.plot(); }
             setTimeout(function(){
                 document.getElementById('loading').style.display = 'none';
             },2000)
@@ -70,11 +78,10 @@ class Favorites {
         })
     }
 
-    remove(index){
-        var location = this.data[index];
-        fetch('http://localhost:3000/maps/favorites/delete', {  
-            method: 'post',
-            body: JSON.stringify({id: location.id, email: acc.email}),
+    remove(info){
+        fetch('http://localhost:3000/maps/favorites/'+info.id, {  
+            method: 'delete',
+            body: JSON.stringify({id: info.id, email: acc.email}),
             headers: {
                 'Content-Type': "application/json"
             },
@@ -82,14 +89,14 @@ class Favorites {
             if(!res.ok){ throw res; }
         }).then(function(data){
             this.data = data;
-            document.getElementById('loadfor').innerHTML = location.name+' Removed';
+            document.getElementById('loadfor').innerHTML = info.name+' Removed';
             setTimeout(function(){
                 document.getElementById('loading').style.display = 'none';
             },2000)
-            for(var num in favs.infowindow) { favs.infowindow[num].close(); }
-            favs.markers[index].setMap(null);
+            for(let num in this.infowindow) { this.infowindow[num].close(); }
+            this.markers[index].setMap(null);
         }.bind(this)).catch(function(error){
-            document.getElementById('loadfor').innerHTML = 'Failed to remove '+location.name;
+            document.getElementById('loadfor').innerHTML = 'Failed to remove '+info.name;
             setTimeout(function(){
                 document.getElementById('loading').style.display = 'none';
             },2000)
