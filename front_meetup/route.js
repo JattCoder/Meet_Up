@@ -19,12 +19,12 @@ class Route {
                 headers: {
                     'Content-Type': "application/json"
                 },
-            }).then(function (response) {
+            }).then((response) =>{
                     if (!response.ok) {
                         throw response;
                     }
                     return response.json();
-            }).then(function(data){
+            }).then((data) =>{
                 if(data.length < 1){
                     alert('suggest you to take flight to your destination.\nHere are nearby airports.')
                     search.spots('airport');
@@ -37,9 +37,9 @@ class Route {
                 if(this.markers) for(let index in this.markers) this.markers[index].setMap(null)
                 this.destination = destination;
                 this.plot(data[0]);
-            }.bind(this)).catch(function(error){
+            }).catch((error) =>{
                 document.getElementById('loadfor').innerHTML = 'Failed to find Route';
-                setTimeout(function(){
+                setTimeout(() =>{
                     document.getElementById('loading').style.display = 'none';
                 },2000)
             })
@@ -58,7 +58,7 @@ class Route {
             strokeOpacity: 2.0,
             strokeWeight: 2
         });
-        google.maps.event.addListener(route.flightPath, 'mouseover', function(e) {
+        google.maps.event.addListener(route.flightPath, 'mouseover', (e) =>{
             let mode = document.getElementById("drivingMode");
             let sel = mode.options[mode.selectedIndex].value;
             fetch('http://localhost:3000/maps/distance', {  
@@ -67,24 +67,24 @@ class Route {
                 headers: {
                     'Content-Type': "application/json"
                 },
-            }).then(function (response) {
+            }).then((response) =>{
                     if (!response.ok) { throw response; } return response.json();
-            }).then(function(data){
+            }).then((data) =>{
                 polyinfo.setPosition(e.latLng);
                 polyinfo.setContent("From: " + data.origin_addresses+"</br>To: "+data.destination_addresses
                                     +"</br>Distance: "+data.rows[0].elements[0].distance.text+"</br>Duration: "
                                     +data.rows[0].elements[0].duration.text);
                 polyinfo.open(home.map);
                 route.polywindow.push(polyinfo);
-            }.bind(this)).catch(function(error){
+            }).catch((error) =>{
                 document.getElementById('loadfor').innerHTML = error.Message;
-                setTimeout(function(){
+                setTimeout(() =>{
                     document.getElementById('loading').style.display = 'none';
                 },2000)
                 console.log('Request failed', error);
             })
         });
-        google.maps.event.addListener(route.flightPath, 'mouseout', function() {
+        google.maps.event.addListener(route.flightPath, 'mouseout', () =>{
             for(let index in route.polywindow){ route.polywindow[index].close(); }
         });
         for (let i = 0; i < this.flightPath.getPath().getLength(); i++) { this.points.push(this.flightPath.getPath().getAt(i).toUrlValue(6)); }

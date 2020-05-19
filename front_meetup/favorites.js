@@ -10,15 +10,15 @@ class Favorites {
         let get = new URL("http://localhost:3000/maps/favorites"),
             params = {email: googleUser.Pt.yu}
             Object.keys(params).forEach(key => get.searchParams.append(key, params[key]))
-        fetch(get).then(function (response) {
+        fetch(get).then((response) =>{
             if (!response.ok) { throw response; }
             return response.json();
-        }).then(function(data){
+        }).then((data) =>{
             this.data = data;
             this.plot();
-        }.bind(this)).catch(function(error){
+        }).catch((error) =>{
             document.getElementById('loadfor').innerHTML = 'Failed to fetch your Favorites';
-            setTimeout(function(){
+            setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
         })
@@ -61,18 +61,18 @@ class Favorites {
             headers: {
                 'Content-Type': "application/json"
             },
-        }).then(function(res){
+        }).then((res) =>{
             if(!res.ok){ throw res; }
-        }).then(function(data){
+        }).then((data) =>{
             this.data = data;
             document.getElementById('loadfor').innerHTML = location.Name+' Added';
             for(let index in search.infowindows) { search.infowindows[index].close(); fav.plot(); }
-            setTimeout(function(){
+            setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
-        }.bind(this)).catch(function(error){
+        }).catch((error) =>{
             document.getElementById('loadfor').innerHTML = 'Failed to add '+location.Name;
-            setTimeout(function(){
+            setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
         })
@@ -85,19 +85,19 @@ class Favorites {
             headers: {
                 'Content-Type': "application/json"
             },
-        }).then(function(res){
+        }).then((res) =>{
             if(!res.ok){ throw res; }
-        }).then(function(data){
+        }).then((data) =>{
             this.data = data;
             document.getElementById('loadfor').innerHTML = info.name+' Removed';
-            setTimeout(function(){
+            setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
             for(let num in this.infowindow) { this.infowindow[num].close(); }
             this.markers[index].setMap(null);
-        }.bind(this)).catch(function(error){
+        }).catch((error) =>{
             document.getElementById('loadfor').innerHTML = 'Failed to remove '+info.name;
-            setTimeout(function(){
+            setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
         })

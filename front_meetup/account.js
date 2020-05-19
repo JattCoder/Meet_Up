@@ -6,10 +6,10 @@ class Account {
             headers: {
                 'Content-Type': "application/json"
             },
-        }).then(function(response){
+        }).then((response) =>{
             if (!response.ok){ throw response }
             return response.json();
-        }).then(function(data){
+        }).then((data) =>{
             this.email = googleUser.Pt["yu"]
             this.name = googleUser.Pt["Ad"]
             let highway = document.getElementById('highways').checked;
@@ -18,9 +18,9 @@ class Account {
             if(highway != data.highways) document.getElementById('highways').dispatchEvent(new MouseEvent("click"));
             if(tolls != data.tolls) document.getElementById('tolls').dispatchEvent(new MouseEvent("click"));
             if(ferries != data.ferries) document.getElementById('ferries').dispatchEvent(new MouseEvent("click"));
-        }.bind(this)).catch(function(error){
+        }).catch((error) =>{
             document.getElementById('loadfor').innerHTML = 'Error';
-            setTimeout(function(){
+            setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
         });
@@ -30,7 +30,7 @@ class Account {
             if (navigator.geolocation) {
                 let timeoutVal = 10 * 1000 * 1000;
                 orienMotion();
-                navigator.geolocation.getCurrentPosition(function(position) {
+                navigator.geolocation.getCurrentPosition((position) =>{
                     this.geopos = {lat:position.coords.latitude, lng:position.coords.longitude};
                     this.me = new google.maps.Marker({
                         position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
@@ -53,7 +53,7 @@ class Account {
                         }
                     })(me));
                     home.map.setCenter({lat:position.coords.latitude, lng:position.coords.longitude});
-                }.bind(this), function(error) {
+                },(error) =>{
                     alert(error.message);
                 },{ enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0 });
             } else {

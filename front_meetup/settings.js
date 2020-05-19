@@ -12,16 +12,16 @@ class Settings {
             headers: {
                 'Content-Type': "application/json"
             },
-        }).then(function(res){
+        }).then((res) =>{
             if(res.ok){
                 route.get_route(route.destination);
             }else{
                 throw response;
             }
         })
-        .catch(function(error){
+        .catch((error) =>{
             document.getElementById('loadfor').innerHTML = 'Error';
-            setTimeout(function(){
+            setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
         });

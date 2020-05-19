@@ -13,20 +13,20 @@ class Search {
             headers: {
                 'Content-Type': "application/json"
             },
-        }).then(function (response) {
+        }).then((response) =>{
                 if (!response.ok) {
                     throw response;
                 }
                 return response.json();
-        }).then(function(data){
+        }).then((data) =>{
             for (let i = 0; i < favs.markers.length; i++){ favs.markers[i].setMap(null);}
             if(home.clks) for(let index in home.clks) home.clks[index].close();
             if(this.mapclk.length > 0) for(let index in this.mapclk) this.mapclk[index].close();
             if(favs.infowindow.length > 0) for(let index in favs.infowindow) favs.infowindow[index].close();
             this.plot(data);
-        }.bind(this)).catch(function(error){
+        }).catch((error) =>{
             document.getElementById('loadfor').innerHTML = 'Failed to find '+input;
-            setTimeout(function(){
+            setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
         })
@@ -39,12 +39,12 @@ class Search {
             headers: {
                 'Content-Type': "application/json"
             },
-        }).then(function (response) {
+        }).then((response) =>{
                 if (!response.ok) {
                     throw response;
                 }
                 return response.json();
-        }).then(function(location){
+        }).then((location) =>{
                 document.getElementById('loading').style.display = 'none';
                 const clkinfo = new google.maps.InfoWindow();
                 if(route.route && Object.keys(route.route).length != 0){
@@ -68,9 +68,9 @@ class Search {
                 this.mapclk.push(clkinfo);
                 //home.map.setCenter({lat: location.Geopoints.lat, lng:location.Geopoints.lng});
                 new google.maps.event.trigger( clkinfo, 'click' );
-        }.bind(this)).catch(function(error){
+        }).catch((error) =>{
             document.getElementById('loadfor').innerHTML = 'Failed to get location information';
-            setTimeout(function(){
+            setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
         })
@@ -84,12 +84,12 @@ class Search {
             headers: {
                 'Content-Type': "application/json"
             },
-        }).then(function (response) { if (!response.ok) { throw response; } return response.json();
-        }).then(function(data){
+        }).then((response) =>{ if (!response.ok) { throw response; } return response.json();
+        }).then((data) =>{
             this.plot(data);
-        }.bind(this)).catch(function(error){
+        }).catch((error) =>{
             document.getElementById('loadfor').innerHTML = 'Failed to find route';
-            setTimeout(function(){
+            setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
         })

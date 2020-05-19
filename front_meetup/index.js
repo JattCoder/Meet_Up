@@ -91,7 +91,7 @@ class Index {
         });
         map.setOptions({ minZoom: 3, maxZoom: 18 });
         map.draggable = true;
-        map.addListener('click', function(event) {
+        map.addListener('click', (event) =>{
             if(this.clks) for(let index in this.clks) this.clks[index].close();
             if(search.mapclk.length > 0) for(let index in search.mapclk) search.mapclk[index].close();
             if(favs.infowindow.length > 0) for(let index in favs.infowindow) favs.infowindow[index].close();
@@ -109,9 +109,9 @@ class Index {
                     headers: {
                         'Content-Type': "application/json"
                     },
-                }).then(function (response) {
+                }).then((response) =>{
                     if (!response.ok) { throw response; } return response.json();
-                }).then(function(data){
+                }).then((data) =>{
                     let geopoints = {lat: event.latLng.lat(), lng: event.latLng.lng()};
                     if(route.route && Object.keys(route.route).length != 0){
                         clk.setContent(`${data[0].formatted_address}<br/><br/>
@@ -125,14 +125,14 @@ class Index {
                     new google.maps.event.trigger( this.clk, 'click' );
                     document.getElementById('loading').style.display = 'none';
                     this.clks.push(clk)
-                }.bind(this)).catch(function(error){
+                }).catch((error) =>{
                         console.log('Request failed', error);
                 });
             }
-        }.bind(this));
-        google.maps.event.addListenerOnce(map, 'idle', function(){
+        });
+        google.maps.event.addListenerOnce(map, 'idle', () =>{
             this.map = map;
             document.getElementById('loading').style.display = 'none';
-        }.bind(this));
+        });
     }
 }
