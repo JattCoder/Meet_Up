@@ -48,7 +48,8 @@ class Account {
                     const meinfo = new google.maps.InfoWindow();
                     google.maps.event.addListener(me, 'click', ((me) =>{
                         return () => {
-                            meinfo.setContent(`${this.name}`);
+                            meinfo.setContent(`${this.name}</br>
+                            ${acc.geopos}`);
                             meinfo.open(home.map, me);
                         }
                     })(me));

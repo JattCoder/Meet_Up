@@ -50,17 +50,17 @@ class Search {
                 if(route.route && Object.keys(route.route).length != 0){
                     clkinfo.setContent(`${location.Status}<br/><br/>${location.Name}<br/>${location.Address}
                             <br/>Rating: ${location.Rating} (${location.Total_Ratings})<br/><br/>
-                            <a onclick='addStop(${JSON.stringify(location)})'>Add Stop</a>`);
+                            <a class='infoLink' onclick='addStop(${JSON.stringify(location)})'>Add Stop</a>`);
                 }else{
                     if(location.Status == null && location.Rating == null && location.Total_Ratings == null){
                         clkinfo.setContent(`${location.Address}<br/><br/>
-                        <a onclick='onSelection(${JSON.stringify(location.Geopoints)})'>Directions</a> <br/>
-                        <a onclick='toFav(${JSON.stringify(location)})'>Add to Favorites</a>`);
+                        <a class='infoLink' onclick='onSelection(${JSON.stringify(location.Geopoints)})'>Directions</a> <br/>
+                        <a class='infoLink' onclick='toFav(${JSON.stringify(location)})'>Add to Favorites</a>`);
                     }else{
                         clkinfo.setContent(`${location.Status}<br/><br/>${location.Name}<br/>${location.Address}
                             <br/>Rating: ${location.Rating} (${location.Total_Ratings})<br/><br/>
-                            <a onclick='onSelection(${JSON.stringify(location.Geopoints)})'>Directions</a> <br/>
-                            <a onclick='toFav(${JSON.stringify(location)})'>Add to Favorites</a>`)
+                            <a class='infoLink' onclick='onSelection(${JSON.stringify(location.Geopoints)})'>Directions</a> <br/>
+                            <a class='infoLink' onclick='toFav(${JSON.stringify(location)})'>Add to Favorites</a>`)
                     }
                 }
                 clkinfo.setPosition({lat: location.Geopoints.lat, lng:location.Geopoints.lng});
@@ -113,17 +113,17 @@ class Search {
                 if(route.route && Object.keys(route.route).length != 0){
                     infoWindow.setContent(`${location[i].Status}<br/><br/>${location[i].Name}<br/>${location[i].Address}
                             <br/>Rating: ${location[i].Rating} (${location[i].Total_Ratings})<br/><br/>
-                            <a onclick='addStop(${JSON.stringify(location[i])})'>Add Stop</a>`);
+                            <a class='infoLink' onclick='addStop(${JSON.stringify(location[i])})'>Add Stop</a>`);
                 }else{
                     if(location[i].Status == null && location[i].Rating == null && location[i].Total_Ratings == null){
                         infoWindow.setContent(`${location[i].Address}<br/><br/>
-                        <a onclick='onSelection(${JSON.stringify(location[i].Geopoints)})'>Directions</a> <br/>
-                        <a onclick='toFav(${JSON.stringify(location[i])})'>Add to Favorites</a>`);
+                        <a class='infoLink' onclick='onSelection(${JSON.stringify(location[i].Geopoints)})'>Directions</a> <br/>
+                        <a class='infoLink' onclick='toFav(${JSON.stringify(location[i])})'>Add to Favorites</a>`);
                     }else{
                         infoWindow.setContent(`${location[i].Status}<br/><br/>${location[i].Name}<br/>${location[i].Address}
                             <br/>Rating: ${location[i].Rating} (${location[i].Total_Ratings})<br/><br/>
                             <a value='directions' onclick='onSelection(${JSON.stringify(location[i].Geopoints)})'>Directions</a> <br/>
-                            <a onclick='toFav(${JSON.stringify(location[i])})'>Add to Favorites</a>`)
+                            <a class='infoLink' onclick='toFav(${JSON.stringify(location[i])})'>Add to Favorites</a>`)
                     }
                 }
                 infoWindow.open(home.map, marker);

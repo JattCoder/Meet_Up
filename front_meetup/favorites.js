@@ -10,6 +10,7 @@ class Favorites {
         let get = new URL("http://localhost:3000/maps/favorites"),
             params = {email: googleUser.Pt.yu}
             Object.keys(params).forEach(key => get.searchParams.append(key, params[key]))
+            debugger
         fetch(get).then((response) =>{
             if (!response.ok) { throw response; }
             return response.json();
@@ -23,10 +24,6 @@ class Favorites {
             },2000)
         })
     }
-
-    //read me
-    //use es6
-    
 
     plot(){
         let data = this.data;
@@ -44,8 +41,8 @@ class Favorites {
                 if(home.clks) for(let index in home.clks) home.clks[index].close();
                 if(search.mapclk.length > 0) for(let index in search.mapclk) search.mapclk[index].close();
                 infoWindow.setContent(`${data[i].name}<br/>${data[i].address}</br></br>
-                            <a onclick='onSelection(${JSON.stringify(geos)})'>Directions</a> <br/>
-                            <a onclick='unlike(${JSON.stringify(data[i])})'>Remove Favorite</a>`)
+                            <a class='infoLink' onclick='onSelection(${JSON.stringify(geos)})'>Directions</a> <br/>
+                            <a class='infoLink' onclick='unlike(${JSON.stringify(data[i])})'>Remove Favorite</a>`)
                 infoWindow.open(home.map, marker);
               }
             })(marker, i));

@@ -115,10 +115,10 @@ class Index {
                     let geopoints = {lat: event.latLng.lat(), lng: event.latLng.lng()};
                     if(route.route && Object.keys(route.route).length != 0){
                         clk.setContent(`${data[0].formatted_address}<br/><br/>
-                            <a onclick='addStop(${JSON.stringify({Geopoints:{lat: geopoints.lat, lng: geopoints.lng}})})'>Add Stop</a>`)
+                            <a class='infoLink' onclick='addStop(${JSON.stringify({Geopoints:{lat: geopoints.lat, lng: geopoints.lng}})})'>Add Stop</a>`)
                     }else{
                         clk.setContent(`${data[0].formatted_address}<br/><br/>
-                            <a onclick='onSelection(${JSON.stringify(geopoints)})'>Directions</a>`)
+                            <a class='infoLink' onclick='onSelection(${JSON.stringify(geopoints)})'>Directions</a>`)
                     }
                     clk.setPosition(geopoints);
                     clk.open(this.map);

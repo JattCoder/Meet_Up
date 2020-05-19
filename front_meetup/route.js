@@ -26,9 +26,10 @@ class Route {
                     return response.json();
             }).then((data) =>{
                 if(data.length < 1){
-                    alert('suggest you to take flight to your destination.\nHere are nearby airports.')
-                    search.spots('airport');
-                    search.plot();
+                    this.waypoints = []
+                    alert('suggest you to take flight to your destination.\nHere are nearby airports.');
+                        search.spots('airport');
+                        search.plot();
                 }
                 this.points = []
                 this.route = data;
@@ -108,13 +109,13 @@ class Route {
                         edinfo.setContent(`Destination</br></br>${data.legs[i].end_address}</br>
                                        Distance: ${data.legs[i].distance.text}</br>
                                        Duration: ${data.legs[i].duration.text}</br></br>
-                                       <a onclick='letsGo()'>Start</a></br>
-                                       <a onclick='cancelRoute()'>Cancel</a>`);
+                                       <a class='infoLink' onclick='letsGo()'>Start</a></br>
+                                       <a class='infoLink' onclick='cancelRoute()'>Cancel</a>`);
                     }else{
                         edinfo.setContent(`Stop</br></br>${data.legs[i].end_address}</br>
                                        Distance: ${data.legs[i].distance.text}</br>
                                        Duration: ${data.legs[i].duration.text}</br></br>
-                                       <a onclick='removeStop(${i})'>Remove Stop</a>`);
+                                       <a class='infoLink' onclick='removeStop(${i})'>Remove Stop</a>`);
                     }
                     edinfo.open(home.map, marker);
                     this.infowindow.push(edinfo);

@@ -96,7 +96,7 @@ function onSignIn(googleUser) {
         route = new Route();
         favs.add_to_maps(googleUser);
         document.getElementById("login_btn").style.display = 'none';
-        document.getElementById("logout_btn").value = googleUser.Pt["Ad"]+" - Signout";
+        document.getElementById("logout_btn").innerHTML = googleUser.Pt["Ad"]+" - Signout";
         document.getElementById("logout_btn").style.display = '';
     }else{
         alert("Authorization Failed!");
@@ -107,10 +107,24 @@ function signOut() {
     let googleObj = gapi.auth2.getAuthInstance();
     let name = googleObj.currentUser.je["Pt"]["Ad"];
     googleObj.signOut().then(function () {
-        alert(name+' signed out.');
+        shutdown();
         document.getElementById("logout_btn").style.display = 'none';
         document.getElementById("login_btn").style.display = '';
     });
+}
+
+function shutdown(){
+    if(route.flightPath) route.flightPath.setMap(null);
+    route.destination = [];
+    route.waypoints = [];
+    route.route = {};
+    for(var index in route.markers){ route.markers[index].setMap(null); }
+    for(var index in route.markers){ route.markers[index].setMap(null); }
+    for(var index in route.infowindow){ route.infowindow[index].close(); }
+    for(var index in route.polywindow){ route.polywindow[index].close(); }
+    if(favs.infowindow) { for(var num in favs.infowindow) { favs.infowindow[num].close(); } }
+    if(favs.markers) { for(var num in favs.markers) { favs.markers[num].setMap(null) } }
+    acc.me.setMap(null);
 }
 
 function orienMotion(){
@@ -127,7 +141,7 @@ function orienMotion(){
         acc.me.set('icon', locationIcon);
     }, true);
     window.addEventListener('devicemotion', function(event) {
-        //console.log(event.acceleration.x + ' m/s2');
+        console.log(event.acceleration.x * 1609.34 + ' mi');
         let timeoutVal = 10 * 1000 * 1000;
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(function(position){
