@@ -140,7 +140,7 @@ function orienMotion(){
             },{ enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0 })
         }
         if(route.route && Object.keys(route.route).length != 0){
-            if (!google.maps.geometry.poly.isLocationOnEdge(new google.maps.LatLng(acc.geopos.lat,acc.geopos.lng), route.flightPath, 0.00003)) {
+            if (!google.maps.geometry.poly.isLocationOnEdge(new google.maps.LatLng(acc.geopos.lat,acc.geopos.lng), route.flightPath, 3e-5)) {
                 //console.log(event.rotationRate.alpha);
             }else{
                 //console.log('im on track')
