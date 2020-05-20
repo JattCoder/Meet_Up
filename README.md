@@ -1,25 +1,34 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Meet Up
 
-Things you may want to cover:
+In Meet Up users can search for places near by or search for places at specific places all over the world, if users simply type in place, Meet Up will look for places near the user's location. Ex: Starbucks, Meet Up will look for starbucks near me or user can search for location at specific place. Ex: Starbucks in California (Using State) or Starbucks in LA (Using City) or Starbucks in 90001 (Using Zip-Code).
 
-* Ruby version
+If user doesn't have any preference, user can simply type in Coffee or Coffee in (City or State or Zip-Code), Meet Up will populate the map with locations.
 
-* System dependencies
+After selecting the location, user can choose to add selected location in favorites or get directions to selected location. Route will displayed on map and user will option to add stops, cancel route or start the navigation. 
 
-* Configuration
+If user want to add stops - When route is displayed on map, user can simply search for another location or find location on map manually and click on that location and choose Add Stop, Meet Up will automatically look for best route possible or user can edit the route by avoiding highways, tolls or ferries.
 
-* Database creation
+Stops can be added as many as user wants, Meet Up will find route unless Stop is overseas. If stop or destination is unreachable, Meet Up will look for airports near by the user, so user can take flight to destination.
 
-* Database initialization
+After done selecting destination and stops (if any), user can click on start and Meet Up will start the navigation to destination.
 
-* How to run the test suite
+Meet Up utilizes JS front-end and Rails API back-end with Active-Record SQL Database.
 
-* Services (job queues, cache servers, search engines, etc.)
+Getting Started
+To get started using this app do the following:
 
-* Deployment instructions
+Clone the repository
 
-* ...
+1. git clone https://github.com/JattCoder/Meet_Up.git
+2. bundle install   --->  Install Missing Gems
+3. rake db:migrate   ---> Migrate the tables
+4. rails s   ---> Start Rails Server
+5. cd front_meetup   ---> Navigate to JS front-end
+6. npx reload -b   ---> Start HTML Server
+
+Enjoy Searching and Navigating to places
+
+If you have any feedback for my application, don't hesitate to let me know. Thank you for checking it out!
 # Meet_Up
