@@ -22,7 +22,7 @@ To get started using this app do the following:
 Clone the repository
 1. git clone https://github.com/JattCoder/Meet_Up.git
 
---- Run commands in your editor console ---
+--- Run commands in your editor terminal ---
 
 Install Missing Gems
 2. bundle install
@@ -31,9 +31,9 @@ Migrate the tables
 3. rake db:migrate
 
 Start Rails Server
-4. rails s   ---> Start Rails Server
+4. rails s
 
-Navigate to JS front-end
+Navigate to JS front-end (In new Terminal)
 5. cd front_meetup
 
 Start HTML Server

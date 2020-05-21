@@ -1,4 +1,5 @@
 class Route {
+
     constructor(){
         this.destination = {}
         this.waypoints = []
@@ -6,13 +7,14 @@ class Route {
         this.infowindow = []
         this.polywindow = []
     }
+
     get_route(destination = {}){
         if(Object.keys(destination).length != 0){
             let mode = document.getElementById("drivingMode");
             let sel = mode.options[mode.selectedIndex].value;
             document.getElementById('loadfor').innerHTML = 'Finding Route';
             document.getElementById('loading').style.display = '';
-            let token = gapi.auth2.getAuthInstance().currentUser.je.tc.access_token;
+            let token = gapi.auth2.getAuthInstance().currentUser.le.Tt.PU;
             fetch('http://localhost:3000/maps/navigation', {  
                 method: 'post',
                 body: JSON.stringify({start: acc.geopos, destination, email: acc.email, token: token, mode: sel, stops: this.waypoints}),
@@ -27,9 +29,12 @@ class Route {
             }).then((data) =>{
                 if(data.length < 1){
                     this.waypoints = []
-                    alert('suggest you to take flight to your destination.\nHere are nearby airports.');
-                        search.spots('airport');
+                    document.getElementById('loadfor').innerHTML = 'No Route, Looking for Airport(s)';
+                    search.spots('airport');
+                    setTimeout(() =>{
                         search.plot();
+                        document.getElementById('loading').style.display = 'none';
+                    },2000)
                 }
                 this.points = []
                 this.route = data;
@@ -39,7 +44,7 @@ class Route {
                 this.destination = destination;
                 this.plot(data[0]);
             }).catch((error) =>{
-                document.getElementById('loadfor').innerHTML = 'Failed to find Route';
+                document.getElementById('loadfor').innerHTML = 'No Route';
                 setTimeout(() =>{
                     document.getElementById('loading').style.display = 'none';
                 },2000)
@@ -128,7 +133,7 @@ class Route {
     }
 
     lets_roll(){
-        home.map.setCenter(acc.geopos)
+        home.map.setCenter(acc.geopos);
         home.map.setZoom(19);
     }
 }

@@ -8,8 +8,8 @@ function onLoad (){
 }
 
 function onSearch (){
-    let currentUser = gapi.auth2.getAuthInstance().currentUser.je.Pt;
-    if (currentUser){
+    //let currentUser = gapi.auth2.getAuthInstance().currentUser.je.Pt;
+    if (acc.email){
         document.getElementById('loadfor').innerHTML = 'Searching';
         document.getElementById('loading').style.display = '';
         search.spots(document.getElementById("search").value);
@@ -96,7 +96,7 @@ function onSignIn(googleUser) {
         route = new Route();
         favs.add_to_maps(googleUser);
         document.getElementById("login_btn").style.display = 'none';
-        document.getElementById("logout_btn").innerHTML = googleUser.Pt["Ad"]+" - Signout";
+        document.getElementById("logout_btn").innerHTML = googleUser.getBasicProfile().getName();+" - Signout";
         document.getElementById("logout_btn").style.display = '';
     }else{
         alert("Authorization Failed!");
@@ -105,6 +105,7 @@ function onSignIn(googleUser) {
 
 function signOut() {
     let googleObj = gapi.auth2.getAuthInstance();
+    debugger
     let name = googleObj.currentUser.je["Pt"]["Ad"];
     googleObj.signOut().then(function () {
         shutdown();
@@ -141,7 +142,7 @@ function orienMotion(){
         acc.me.set('icon', locationIcon);
     }, true);
     window.addEventListener('devicemotion', function(event) {
-        console.log(event.acceleration.x * 1609.34 + ' mi');
+        //console.log(event.acceleration.x * 1609.34 + ' mi');
         let timeoutVal = 10 * 1000 * 1000;
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(function(position){

@@ -8,9 +8,8 @@ class Favorites {
 
     add_to_maps(googleUser){
         let get = new URL("http://localhost:3000/maps/favorites"),
-            params = {email: googleUser.Pt.yu}
+            params = {email: googleUser.getBasicProfile().getEmail()}
             Object.keys(params).forEach(key => get.searchParams.append(key, params[key]))
-            debugger
         fetch(get).then((response) =>{
             if (!response.ok) { throw response; }
             return response.json();
@@ -42,7 +41,7 @@ class Favorites {
                 if(search.mapclk.length > 0) for(let index in search.mapclk) search.mapclk[index].close();
                 infoWindow.setContent(`${data[i].name}<br/>${data[i].address}</br></br>
                             <a class='infoLink' onclick='onSelection(${JSON.stringify(geos)})'>Directions</a> <br/>
-                            <a class='infoLink' onclick='unlike(${JSON.stringify(data[i])})'>Remove Favorite</a>`)
+                            <a class='infoLink' onclick='unlike(${JSON.stringify(i)})'>Remove Favorite</a>`)
                 infoWindow.open(home.map, marker);
               }
             })(marker, i));
@@ -75,7 +74,8 @@ class Favorites {
         })
     }
 
-    remove(info){
+    remove(index){
+        let info = this.data[index];
         fetch('http://localhost:3000/maps/favorites/'+info.id, {  
             method: 'delete',
             body: JSON.stringify({id: info.id, email: acc.email}),
@@ -93,6 +93,7 @@ class Favorites {
             for(let num in this.infowindow) { this.infowindow[num].close(); }
             this.markers[index].setMap(null);
         }).catch((error) =>{
+            debugger
             document.getElementById('loadfor').innerHTML = 'Failed to remove '+info.name;
             setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';

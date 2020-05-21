@@ -2,7 +2,7 @@ class Account {
     constructor(googleUser) {
         fetch('http://localhost:3000/user', {  
             method: 'post',
-            body: JSON.stringify({name:googleUser.Pt["Ad"], email:googleUser.Pt["yu"], uid:googleUser.Pt["MU"], image:googleUser.Pt["QK"]}),
+            body: JSON.stringify({name:googleUser.getBasicProfile().getName(), email:googleUser.getBasicProfile().getEmail(), uid:googleUser.getBasicProfile().getId(), image:googleUser.getBasicProfile().getImageUrl()}),
             headers: {
                 'Content-Type': "application/json"
             },
@@ -10,8 +10,8 @@ class Account {
             if (!response.ok){ throw response }
             return response.json();
         }).then((data) =>{
-            this.email = googleUser.Pt["yu"]
-            this.name = googleUser.Pt["Ad"]
+            this.email = googleUser.getBasicProfile().getEmail();
+            this.name = googleUser.getBasicProfile().getName();
             let highway = document.getElementById('highways').checked;
             let tolls = document.getElementById('tolls').checked;
             let ferries = document.getElementById('ferries').checked;

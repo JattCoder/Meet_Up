@@ -7,13 +7,7 @@ class Search {
     }
 
     spots(input){
-        fetch('http://localhost:3000/maps/places', {  
-            method: 'post',
-            body: JSON.stringify({search: input}),
-            headers: {
-                'Content-Type': "application/json"
-            },
-        }).then((response) =>{
+        fetch(`http://localhost:3000/maps/places?search=${input}`).then((response) =>{
                 if (!response.ok) {
                     throw response;
                 }
@@ -110,6 +104,7 @@ class Search {
             });
             google.maps.event.addListener(marker, 'click', ((marker, i) =>{
             return () => {
+                if(location[i].Name.includes("'")) location[i].Name = location[i].Name.replace("'","");
                 if(route.route && Object.keys(route.route).length != 0){
                     infoWindow.setContent(`${location[i].Status}<br/><br/>${location[i].Name}<br/>${location[i].Address}
                             <br/>Rating: ${location[i].Rating} (${location[i].Total_Ratings})<br/><br/>
@@ -122,7 +117,7 @@ class Search {
                     }else{
                         infoWindow.setContent(`${location[i].Status}<br/><br/>${location[i].Name}<br/>${location[i].Address}
                             <br/>Rating: ${location[i].Rating} (${location[i].Total_Ratings})<br/><br/>
-                            <a value='directions' onclick='onSelection(${JSON.stringify(location[i].Geopoints)})'>Directions</a> <br/>
+                            <a class='infoLink' onclick='onSelection(${JSON.stringify(location[i].Geopoints)})'>Directions</a> <br/>
                             <a class='infoLink' onclick='toFav(${JSON.stringify(location[i])})'>Add to Favorites</a>`)
                     }
                 }
