@@ -22,7 +22,7 @@ class SearchController < ApplicationController
             retry_timeout: 40, 
             queries_per_second: 80
         )
-        render json: gmaps.reverse_geocode(params[:geo])
+        render json: gmaps.reverse_geocode([params[:geo].split(',')[0].to_f,params[:geo].split(',')[1].to_f])
 
     end
 

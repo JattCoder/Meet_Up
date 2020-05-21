@@ -27,7 +27,7 @@ class Favorites {
     plot(){
         let data = this.data;
         let i, infoWindow = new google.maps.InfoWindow();
-        for (i = 0; i < data.length; i++) { 
+        for (i = 0; i < data.length; i++) {
             let marker = new google.maps.Marker({
               position: new google.maps.LatLng(data[i].latitude, data[i].longitude),
               animation: google.maps.Animation.DROP,
@@ -57,16 +57,21 @@ class Favorites {
             headers: {
                 'Content-Type': "application/json"
             },
-        }).then((res) =>{
-            if(!res.ok){ throw res; }
+        }).then((response) =>{
+            if (!response.ok) { throw response; }
+            return response.json();
         }).then((data) =>{
-            this.data = data;
             document.getElementById('loadfor').innerHTML = location.Name+' Added';
-            for(let index in search.infowindows) { search.infowindows[index].close(); fav.plot(); }
+            for(let index in search.infowindows) { search.infowindows[index].close(); }
+            for(let index in this.infowindow) { this.infowindow[index].close(); }
+            for(let index in this.markers) { this.markers[index].setMap(null); }
+            this.data = data;
+            this.plot();
             setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
         }).catch((error) =>{
+            console.log(error)
             document.getElementById('loadfor').innerHTML = 'Failed to add '+location.Name;
             setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
@@ -82,16 +87,19 @@ class Favorites {
             headers: {
                 'Content-Type': "application/json"
             },
-        }).then((res) =>{
-            if(!res.ok){ throw res; }
+        }).then((response) =>{
+            if (!response.ok) { throw response; }
+            return response.json();
         }).then((data) =>{
             this.data = data;
             document.getElementById('loadfor').innerHTML = info.name+' Removed';
             setTimeout(() =>{
                 document.getElementById('loading').style.display = 'none';
             },2000)
-            for(let num in this.infowindow) { this.infowindow[num].close(); }
-            this.markers[index].setMap(null);
+            for(let num in favs.infowindow) { favs.infowindow[num].close(); }
+            for(let num in favs.markers) { favs.markers[num].setMap(null); }
+            //this.markers[index].setMap(null);
+            this.plot()
         }).catch((error) =>{
             debugger
             document.getElementById('loadfor').innerHTML = 'Failed to remove '+info.name;

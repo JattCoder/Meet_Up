@@ -13,6 +13,7 @@ class Search {
                 }
                 return response.json();
         }).then((data) =>{
+            for (let i = 0; i < this.markers.length; i++) this.markers[i].setMap(null);
             for (let i = 0; i < favs.markers.length; i++){ favs.markers[i].setMap(null);}
             if(home.clks) for(let index in home.clks) home.clks[index].close();
             if(this.mapclk.length > 0) for(let index in this.mapclk) this.mapclk[index].close();
@@ -27,13 +28,8 @@ class Search {
     }
 
     spot(event){
-        fetch('http://localhost:3000/maps/spot', {  
-            method: 'post',
-            body: JSON.stringify({placeid: event.placeId}),
-            headers: {
-                'Content-Type': "application/json"
-            },
-        }).then((response) =>{
+        fetch(`http://localhost:3000/maps/spot?placeid=${event.placeId}`)
+        .then((response) =>{
                 if (!response.ok) {
                     throw response;
                 }
@@ -72,13 +68,8 @@ class Search {
     }
 
     my_route(input){
-        fetch('http://localhost:3000/maps/search_route', {  
-            method: 'post',
-            body: JSON.stringify({query: input, points: route.points}),
-            headers: {
-                'Content-Type': "application/json"
-            },
-        }).then((response) =>{ if (!response.ok) { throw response; } return response.json();
+        fetch(`http://localhost:3000/maps/search_route?query=${input}?points=${route.points}`)
+        .then((response) =>{ if (!response.ok) { throw response; } return response.json();
         }).then((data) =>{
             this.plot(data);
         }).catch((error) =>{
@@ -91,7 +82,6 @@ class Search {
 
     plot(location = []){
         const infoWindow = new google.maps.InfoWindow();
-        if(this.markers){ for (let index in this.markers.length){ this.markers[index].setMap(null);} }
         if(this.clkinfo) { this.clkinfo.close(); }
         let i;
         let spots = [];

@@ -41,8 +41,8 @@ class NavigationController < ApplicationController
         ferries = 'ferries'
         tolls = 'tolls'
         mode = params[:mode]
-        destination = [params[:destination][:lat],params[:destination][:lng]]
-        start = [params[:start][:lat], params[:start][:lng]]
+        destination = [params[:destination].split(',')[0].to_f,params[:destination].split(',')[1].to_f]
+        start = [params[:start].split(',')[0].to_f, params[:start].split(',')[1].to_f]
         settings = Setting.find_by(user_id: User.find_by(email: params[:email]).id)
         highways = '' if settings.highways == false
         ferries = '' if settings.ferries == false

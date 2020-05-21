@@ -11,15 +11,11 @@ Rails.application.routes.draw do
 
   scope :maps do
     post 'navigation', to: 'navigation#navigate'
-    post 'distance', to: 'navigation#distance'
-    
+    get 'distance', to: 'navigation#distance'
     get 'places', to: 'places#index'
-
-
-    post 'spot', to: 'search#spot'
-    post 'search_route', to: 'search#route'
-    post 'geocode', to:'search#geocode'
-
+    get 'spot', to: 'search#spot'
+    get 'search_route', to: 'search#route'
+    get 'geocode', to:'search#geocode'
     resources :favorites, only: [:index, :destroy, :create]
   end
 

@@ -67,13 +67,12 @@ class Route {
         google.maps.event.addListener(route.flightPath, 'mouseover', (e) =>{
             let mode = document.getElementById("drivingMode");
             let sel = mode.options[mode.selectedIndex].value;
-            fetch('http://localhost:3000/maps/distance', {  
-                method: 'post',
-                body: JSON.stringify({start: e.latLng, destination: route.destination, email: acc.email, mode: sel}),
-                headers: {
-                    'Content-Type': "application/json"
-                },
-            }).then((response) =>{
+            let start = `${e.latLng.lat()},${e.latLng.lng()}`
+            let end = `${route.destination.lat},${route.destination.lng}`
+            let get = new URL(`http://localhost:3000/maps/distance?destination=${end}`),
+            params = {start: start, email: acc.email, mode: sel}
+            Object.keys(params).forEach(key => get.searchParams.append(key, params[key]))
+            fetch(get).then((response) =>{
                     if (!response.ok) { throw response; } return response.json();
             }).then((data) =>{
                 polyinfo.setPosition(e.latLng);

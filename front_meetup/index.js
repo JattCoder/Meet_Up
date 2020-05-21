@@ -103,13 +103,9 @@ class Index {
                 onMapSpot(event);
             }else{
                 const clk = new google.maps.InfoWindow();
-                fetch('http://localhost:3000/maps/geocode', {  
-                    method: 'post',
-                    body: JSON.stringify({geo: [event.latLng.lat(),event.latLng.lng()]}),
-                    headers: {
-                        'Content-Type': "application/json"
-                    },
-                }).then((response) =>{
+                let coordinates = `${event.latLng.lat()},${event.latLng.lng()}`;
+                fetch(`http://localhost:3000/maps/geocode?geo=${coordinates}`)
+                .then((response) =>{
                     if (!response.ok) { throw response; } return response.json();
                 }).then((data) =>{
                     let geopoints = {lat: event.latLng.lat(), lng: event.latLng.lng()};
