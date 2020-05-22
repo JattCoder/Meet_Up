@@ -37,6 +37,7 @@ class Search {
         }).then((location) =>{
                 document.getElementById('loading').style.display = 'none';
                 const clkinfo = new google.maps.InfoWindow();
+                location.Name = location.Name.replace("'","");
                 if(route.route && Object.keys(route.route).length != 0){
                     clkinfo.setContent(`${location.Status}<br/><br/>${location.Name}<br/>${location.Address}
                             <br/>Rating: ${location.Rating} (${location.Total_Ratings})<br/><br/>
