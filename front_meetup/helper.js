@@ -106,7 +106,7 @@ function onSignIn(googleUser) {
 function signOut() {
     let googleObj = gapi.auth2.getAuthInstance();
     debugger
-    let name = googleObj.currentUser.je["Pt"]["Ad"];
+    //let name = googleObj.currentUser.je["Pt"]["Ad"];
     googleObj.signOut().then(function () {
         shutdown();
         document.getElementById("logout_btn").style.display = 'none';

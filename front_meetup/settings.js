@@ -2,7 +2,7 @@ class Settings {
     save_settings(){
         document.getElementById('loadfor').value = 'Saving'
         document.getElementById('loading').style.display = '';
-        let email = gapi.auth2.getAuthInstance().currentUser["je"].Pt.yu;
+        let email = acc.email;
         let highway = document.getElementById('highways').checked;
         let tolls = document.getElementById('tolls').checked;
         let ferries = document.getElementById('ferries').checked;

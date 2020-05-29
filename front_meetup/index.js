@@ -89,7 +89,7 @@ class Index {
             stylers: [{color: '#17263c'}]
             }]
         });
-        map.setOptions({ minZoom: 3, maxZoom: 18 });
+        map.setOptions({ minZoom: 3, maxZoom: 19 });
         map.draggable = true;
         map.addListener('click', (event) =>{
             if(this.clks) for(let index in this.clks) this.clks[index].close();
